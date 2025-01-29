@@ -1,7 +1,7 @@
 
 #include "../includes/cub3d.h"
 
-int	ft_create_window(t_data *data)
+int	ft_create_window(t_parsing_data *data)
 {
 	data->mlx = mlx_init();
 	if (!data->mlx)
@@ -20,7 +20,7 @@ int	ft_create_window(t_data *data)
 }
 
 
-int set_data_img(t_data *data)
+int set_data_img(t_parsing_data *data)
 {
 	char	*line;
 	//char	*string;
@@ -50,7 +50,7 @@ int set_data_img(t_data *data)
 }
 
 
-int parse(int argc, char **argv, t_data *data)
+int parse(int argc, char **argv, t_parsing_data *data)
 {
 	if (check_nbr_arg(argc))
 		return (EXIT_FAILURE);
@@ -66,7 +66,10 @@ int parse(int argc, char **argv, t_data *data)
 
 int	main(int argc, char **argv)
 {
-	t_data data;
+	if (argc == 1)        //DEBUG
+		start_game(NULL); //DEBUG
+
+	t_parsing_data data;
 
 	if(parse(argc, argv,&data))
 		return (EXIT_FAILURE);

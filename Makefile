@@ -1,19 +1,25 @@
-NAME = cub3d
-
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/01/29 16:11:50 by ajosse            #+#    #+#              #
+#    Updated: 2025/01/29 21:37:45 by ajosse           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g3
 
-MLX_DIR = ./minilibx-linux
-MLX_LIB = $(MLX_DIR)/libmlx_Linux.a
-MLX_FLAGS = -Lmlx -lmlx -L/usr/lib/X11 -lXext -lX11
-
 # dir/file.c
 SRCFILES =	main.c \
+			start_game.c \
 			ray_casting/raycast.c \
-			parsing/ \
-			parsing/ \
+			parsing/check_args.c
 			
+
 SRCDIR = ./srcs/
 SRCS = $(addprefix $(SRCDIR), $(SRCFILES))
 OBJDIR = ./build/
@@ -40,6 +46,7 @@ LIBS += -lmlx -lX11 -lXext -lm
 LIBS += -L$(LIBFT_PATH)
 LIBS += -lft
 
+NAME = cub3d
 
 NB_COMPILED = 0
 TOTAL_FILES := $(shell echo $(words $(SRCFILES))| bc)
@@ -58,22 +65,18 @@ ORANGE_COLOR = \033[1;38;5;214m
 PINK_COLOR   = \033[1;38;5;13m
 BROWN_COLOR  = \033[1;38;5;94m
 
-all: $(LIBFT) $(NAME)
-
+all: $(NAME)
 
 $(NAME): $(LIBFT_LIB) $(MLX_LIB) $(OBJS)
-
 	@ echo -n "\r"
 	@ echo    "$(GREEN_COLOR)project : compiling c files ... $(TOTAL_FILES)/$(TOTAL_FILES)    ✅$(RESET_COLOR)"
 	@ echo -n "$(BLUE_COLOR)- $(NB_COMPILED) files updated -$(RESET_COLOR)\n\n"
 	@ echo -n "compiling $(NAME)..."
-	@ $(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBS) $(INCLUDES) $(MLX_LIB) $(MLX_FLAGS)
+	@ $(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBS)
 	@ echo -n "\r"
 	@ echo "$(GREEN_COLOR)$(NAME) compiled    ✔$(RESET_COLOR)"
 
-$(MLX_LIB):
-	@make -C $(MLX_DIR) 
-
+#                        assert it's existing
 $(OBJDIR)%.o: $(SRCDIR)%.c | $(OBJDIR)
 	@ $(CC) $(CFLAGS) $(INCLUDES) -MMD -MF $(@:.o=.d) -c $< -o $@
 	@ $(eval NB_COMPILED=$(shell echo $(NB_COMPILED) + 1 | bc))
