@@ -3,16 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putchar_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebioda <llebioda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wlouaked <wlouaked@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/06 15:02:16 by llebioda          #+#    #+#             */
-/*   Updated: 2024/11/06 16:37:27 by llebioda         ###   ########.fr       */
+/*   Created: 2024/05/28 16:41:20 by wlouaked          #+#    #+#             */
+/*   Updated: 2024/05/28 16:44:42 by wlouaked         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
+#include "libft.h"
 
 void	ft_putchar_fd(char c, int fd)
 {
 	write(fd, &c, 1);
 }
+/*
+int main (void)
+{
+	ft_putchar_fd('W', 1);
+}
+*/

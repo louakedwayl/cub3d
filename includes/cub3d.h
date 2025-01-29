@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 16:15:31 by ajosse            #+#    #+#             */
-/*   Updated: 2025/01/29 18:35:01 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/01/29 20:46:55 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define CUB3D_H
 
 # include "../libft/libft.h"
-# include "../libft/gnl/get_next_line.h"
+# include "../minilibx-linux/mlx.h"
 
 # include <stdio.h>
 # include <unistd.h>
@@ -26,6 +26,9 @@
 # define TRUE 1
 # define FALSE 0
 typedef int	t_bool;
+
+# define EXIT_FAILURE 1
+# define EXIT_SUCCESS 0
 
 // utils
 typedef enum e_response

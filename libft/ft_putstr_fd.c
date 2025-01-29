@@ -3,17 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebioda <llebioda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wlouaked <wlouaked@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/06 15:04:05 by llebioda          #+#    #+#             */
-/*   Updated: 2024/12/17 10:16:57 by llebioda         ###   ########.fr       */
+/*   Created: 2024/05/28 16:39:56 by wlouaked          #+#    #+#             */
+/*   Updated: 2024/05/28 20:24:26 by wlouaked         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
 #include "libft.h"
 
 void	ft_putstr_fd(char *s, int fd)
 {
-	write(fd, s, ft_strlen(s));
+	int	i;
+	int	nbr;
+
+	i = 0;
+	nbr = ft_strlen(s);
+	while (i < nbr)
+	{
+		write (fd, &s[i], 1);
+		i++;
+	}
 }
+/*
+int	main(void)
+{
+	char	*string = "Je suis un chat.";
+
+	ft_putstr_fd(string, 1);
+}
+*/

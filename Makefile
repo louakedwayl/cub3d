@@ -6,7 +6,7 @@
 #    By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/29 16:11:50 by ajosse            #+#    #+#              #
-#    Updated: 2025/01/29 18:32:19 by ajosse           ###   ########.fr        #
+#    Updated: 2025/01/29 20:51:35 by ajosse           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,8 @@ CFLAGS = -Wall -Wextra -Werror -g3
 # dir/file.c
 SRCFILES =	main.c \
 			ray_casting/raycast.c \
+			parsing/ \
+			parsing/ \
 			
 
 SRCDIR = ./srcs/
@@ -27,13 +29,22 @@ DEPS = $(OBJS:.o=.d)
 HEADERDIR = ./includes/
 INCLUDES = -I $(HEADERDIR)
 
-LIBS =  -lreadline
-
 LIBFT_NAME = libft.a
 LIBFT_PATH = ./libft/
 LIBFT_LIB = $(LIBFT_PATH)$(LIBFT_NAME)
+
+MLX_NAME = libmlx.a
+MLX_PATH = ./minilibx-linux/
+MLX_LIB = $(MLX_PATH)$(MLX_NAME)
+
 INCLUDES += -I $(LIBFT_PATH)
-LIBS += $(LIBFT_LIB)
+INCLUDES += -I $(MLX_PATH)
+
+LIBS = -L$(MLX_PATH)
+LIBS += -lmlx -lX11 -lXext -lm
+
+LIBS += -L$(LIBFT_PATH)
+LIBS += -lft
 
 NAME = cub3d
 
@@ -56,7 +67,7 @@ BROWN_COLOR  = \033[1;38;5;94m
 
 all: $(NAME)
 
-$(NAME): $(LIBFT_LIB) $(OBJS)
+$(NAME): $(LIBFT_LIB) $(MLX_LIB) $(OBJS)
 	@ echo -n "\r"
 	@ echo    "$(GREEN_COLOR)project : compiling c files ... $(TOTAL_FILES)/$(TOTAL_FILES)    ✅$(RESET_COLOR)"
 	@ echo -n "$(BLUE_COLOR)- $(NB_COMPILED) files updated -$(RESET_COLOR)\n\n"
@@ -65,6 +76,7 @@ $(NAME): $(LIBFT_LIB) $(OBJS)
 	@ echo -n "\r"
 	@ echo "$(GREEN_COLOR)$(NAME) compiled    ✔$(RESET_COLOR)"
 
+#                        assert it's existing
 $(OBJDIR)%.o: $(SRCDIR)%.c | $(OBJDIR)
 	@ $(CC) $(CFLAGS) $(INCLUDES) -MMD -MF $(@:.o=.d) -c $< -o $@
 	@ $(eval NB_COMPILED=$(shell echo $(NB_COMPILED) + 1 | bc))
@@ -86,9 +98,18 @@ $(LIBFT_LIB):
 	@ echo -n "\r"
 	@ echo "$(GREEN_COLOR)$(LIBFT_NAME) compiled    ✔$(RESET_COLOR)"
 
+$(MLX_LIB):
+	@ echo -n "compiling $(MLX_NAME)..."
+	@ make -s -C $(MLX_PATH) > mlxlog 2>&1
+	@ rm mlxlog
+	@ echo -n "\r"
+	@ echo "$(GREEN_COLOR)$(MLX_NAME) compiled    ✔$(RESET_COLOR)"
+
 clean:
 	@ $(MAKE) --no-print-directory cleanself
 	@ make clean -s -C $(LIBFT_PATH)
+	@ make clean -s -C $(MLX_PATH) > mlxlog 2>&1
+	@ rm mlxlog
 	@ echo "$(PURPLE_COLOR)LIBFT : OBJs cleaned$(RESET_COLOR)"
 
 cleanself:
@@ -99,6 +120,8 @@ fclean: cleanself
 	@ rm -f $(NAME)
 	@ echo "$(CYAN_COLOR)$(NAME) binary cleaned$(RESET_COLOR)"
 	@ make fclean -s -C $(LIBFT_PATH)
+	@ make clean -s -C $(MLX_PATH) > mlxlog 2>&1
+	@ rm mlxlog
 	@ echo "$(PURPLE_COLOR)LIBFT all cleaned$(RESET_COLOR)"
 
 re: fclean
