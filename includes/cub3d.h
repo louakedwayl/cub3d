@@ -3,7 +3,10 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include "libft.h"
+
+# include "../libft/libft.h"
+# include "../minilibx-linux/mlx.h"
+
 
 # include <stdio.h>
 # include <unistd.h>
@@ -17,6 +20,9 @@
 # define FALSE 0
 
 typedef int	t_bool;
+
+# define EXIT_FAILURE 1
+# define EXIT_SUCCESS 0
 
 // utils
 typedef enum e_response

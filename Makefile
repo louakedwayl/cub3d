@@ -1,5 +1,6 @@
 NAME = cub3d
 
+
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g3
 
@@ -10,6 +11,8 @@ MLX_FLAGS = -Lmlx -lmlx -L/usr/lib/X11 -lXext -lX11
 # dir/file.c
 SRCFILES =	main.c \
 			ray_casting/raycast.c \
+			parsing/ \
+			parsing/ \
 			
 SRCDIR = ./srcs/
 SRCS = $(addprefix $(SRCDIR), $(SRCFILES))
@@ -20,13 +23,22 @@ DEPS = $(OBJS:.o=.d)
 HEADERDIR = ./includes/
 INCLUDES = -I $(HEADERDIR)
 
-LIBS =  -lreadline
-
 LIBFT_NAME = libft.a
 LIBFT_PATH = ./libft/
 LIBFT_LIB = $(LIBFT_PATH)$(LIBFT_NAME)
+
+MLX_NAME = libmlx.a
+MLX_PATH = ./minilibx-linux/
+MLX_LIB = $(MLX_PATH)$(MLX_NAME)
+
 INCLUDES += -I $(LIBFT_PATH)
-LIBS += $(LIBFT_LIB)
+INCLUDES += -I $(MLX_PATH)
+
+LIBS = -L$(MLX_PATH)
+LIBS += -lmlx -lX11 -lXext -lm
+
+LIBS += -L$(LIBFT_PATH)
+LIBS += -lft
 
 
 NB_COMPILED = 0
@@ -48,7 +60,9 @@ BROWN_COLOR  = \033[1;38;5;94m
 
 all: $(LIBFT) $(NAME)
 
-$(NAME): $(LIBFT_LIB) $(OBJS) $(MLX_LIB)
+
+$(NAME): $(LIBFT_LIB) $(MLX_LIB) $(OBJS)
+
 	@ echo -n "\r"
 	@ echo    "$(GREEN_COLOR)project : compiling c files ... $(TOTAL_FILES)/$(TOTAL_FILES)    ✅$(RESET_COLOR)"
 	@ echo -n "$(BLUE_COLOR)- $(NB_COMPILED) files updated -$(RESET_COLOR)\n\n"
@@ -81,9 +95,18 @@ $(LIBFT_LIB):
 	@ echo -n "\r"
 	@ echo "$(GREEN_COLOR)$(LIBFT_NAME) compiled    ✔$(RESET_COLOR)"
 
+$(MLX_LIB):
+	@ echo -n "compiling $(MLX_NAME)..."
+	@ make -s -C $(MLX_PATH) > mlxlog 2>&1
+	@ rm mlxlog
+	@ echo -n "\r"
+	@ echo "$(GREEN_COLOR)$(MLX_NAME) compiled    ✔$(RESET_COLOR)"
+
 clean:
 	@ $(MAKE) --no-print-directory cleanself
 	@ make clean -s -C $(LIBFT_PATH)
+	@ make clean -s -C $(MLX_PATH) > mlxlog 2>&1
+	@ rm mlxlog
 	@ echo "$(PURPLE_COLOR)LIBFT : OBJs cleaned$(RESET_COLOR)"
 
 cleanself:
@@ -94,6 +117,8 @@ fclean: cleanself
 	@ rm -f $(NAME)
 	@ echo "$(CYAN_COLOR)$(NAME) binary cleaned$(RESET_COLOR)"
 	@ make fclean -s -C $(LIBFT_PATH)
+	@ make clean -s -C $(MLX_PATH) > mlxlog 2>&1
+	@ rm mlxlog
 	@ echo "$(PURPLE_COLOR)LIBFT all cleaned$(RESET_COLOR)"
 
 re: fclean
