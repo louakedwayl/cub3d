@@ -1,30 +1,21 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cub3d.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/29 16:15:31 by ajosse            #+#    #+#             */
-/*   Updated: 2025/01/29 18:35:01 by ajosse           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include "../libft/libft.h"
-# include "../libft/gnl/get_next_line.h"
+# include "libft.h"
 
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include "minilibx-linux/mlx.h"
 
 # define WINDOW_WIDTH 700
 # define WINDOW_HEIGHT 700
 
 # define TRUE 1
 # define FALSE 0
+
 typedef int	t_bool;
 
 // utils
@@ -51,19 +42,41 @@ typedef struct s_mlx_data
 	void	*img;
 }	t_mlx_data;
 
-// main data for cub3d
+
+typedef struct s_img {
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+}						t_img;
+
 typedef struct s_data
 {
-	t_mlx_data	*mlx_data;
-	char		**map;
-	int			map_width;
-	int			map_height;
-	int			FOV;
-}	t_data;
+	int		fd;
+	char	**map;
+	char	*north;
+	char	*west;
+	char	*south;
+	char	*east;
+	void	*mlx;
+	void	*mlx_win;
+	int		floor[2];
+	int		ceiling[2];
+	t_img	img_north;
+	t_img	img_west;
+	t_img	img_south;
+	t_img	img_east;
+}				t_data;
 
 // FOLDER - - - - - - - - - ray_casting - - - - - - - - -
 
 //raycast.c
 void	raycast(t_data *data);
+
+// check_args.c
+int				check_nbr_arg(int argc);
+int 			check_name_map(char **argv);
+int				open_map(t_data *data, char *map);
 
 #endif

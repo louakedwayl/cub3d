@@ -1,35 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wlouaked <wlouaked@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/28 16:39:56 by wlouaked          #+#    #+#             */
-/*   Updated: 2024/05/28 20:24:26 by wlouaked         ###   ########.fr       */
+/*   Created: 2024/05/24 20:40:53 by wlouaked          #+#    #+#             */
+/*   Updated: 2024/05/28 16:29:59 by wlouaked         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putstr_fd(char *s, int fd)
+int	ft_memcmp(const void *s1, const void *s2, size_t n)
 {
-	int	i;
-	int	nbr;
+	size_t			i;
+	unsigned char	*string;
+	unsigned char	*string2;
 
+	string = malloc(sizeof(char) * n);
+	string2 = malloc(sizeof(char) * n);
+	string = (unsigned char *)s1;
+	string2 = (unsigned char *)s2;
 	i = 0;
-	nbr = ft_strlen(s);
-	while (i < nbr)
+	while (i < n)
 	{
-		write (fd, &s[i], 1);
+		if (string[i] > string2[i])
+		{
+			return (1);
+		}
+		if (string[i] < string2[i])
+		{
+			return (-1);
+		}
 		i++;
 	}
+	return (0);
 }
-/*
-int	main(void)
-{
-	char	*string = "Je suis un chat.";
-
-	ft_putstr_fd(string, 1);
-}
-*/

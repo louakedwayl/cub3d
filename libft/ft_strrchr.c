@@ -1,35 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wlouaked <wlouaked@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/28 16:39:56 by wlouaked          #+#    #+#             */
-/*   Updated: 2024/05/28 20:24:26 by wlouaked         ###   ########.fr       */
+/*   Created: 2024/05/24 19:14:53 by wlouaked          #+#    #+#             */
+/*   Updated: 2024/05/24 20:44:29 by wlouaked         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putstr_fd(char *s, int fd)
+char	*ft_strrchr(const char *s, int c)
 {
-	int	i;
-	int	nbr;
+	size_t		i;
+	size_t		len;
+	char		*returnstring;
 
 	i = 0;
-	nbr = ft_strlen(s);
-	while (i < nbr)
+	len = ft_strlen(s);
+	returnstring = NULL;
+	while (i <= len)
 	{
-		write (fd, &s[i], 1);
+		if ((unsigned char)s[i] == (unsigned char)c)
+		{
+			returnstring = ((char *)&s[i]);
+		}
+		if (!s[i] && !c)
+			return ((char *)&s[i]);
 		i++;
 	}
+	if (returnstring)
+	{
+		return (returnstring);
+	}
+	return (NULL);
 }
-/*
-int	main(void)
-{
-	char	*string = "Je suis un chat.";
-
-	ft_putstr_fd(string, 1);
-}
-*/

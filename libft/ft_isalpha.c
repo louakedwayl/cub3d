@@ -1,35 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_isalpha.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wlouaked <wlouaked@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/28 16:39:56 by wlouaked          #+#    #+#             */
-/*   Updated: 2024/05/28 20:24:26 by wlouaked         ###   ########.fr       */
+/*   Created: 2024/05/20 15:10:10 by wlouaked          #+#    #+#             */
+/*   Updated: 2024/05/20 18:37:08 by wlouaked         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putstr_fd(char *s, int fd)
+int	ft_isalpha(int c)
 {
-	int	i;
-	int	nbr;
-
-	i = 0;
-	nbr = ft_strlen(s);
-	while (i < nbr)
+	if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122))
 	{
-		write (fd, &s[i], 1);
-		i++;
+		return (1);
+	}
+	else
+	{
+		return (0);
 	}
 }
-/*
-int	main(void)
-{
-	char	*string = "Je suis un chat.";
-
-	ft_putstr_fd(string, 1);
-}
-*/

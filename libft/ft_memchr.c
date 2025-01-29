@@ -1,35 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wlouaked <wlouaked@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/28 16:39:56 by wlouaked          #+#    #+#             */
-/*   Updated: 2024/05/28 20:24:26 by wlouaked         ###   ########.fr       */
+/*   Created: 2024/05/24 19:02:30 by wlouaked          #+#    #+#             */
+/*   Updated: 2024/05/24 19:13:28 by wlouaked         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putstr_fd(char *s, int fd)
+void	*ft_memchr(const void *s, int c, size_t n)
 {
-	int	i;
-	int	nbr;
+	unsigned char	*returnvalue;
+	size_t			i;
 
 	i = 0;
-	nbr = ft_strlen(s);
-	while (i < nbr)
+	returnvalue = (unsigned char *)s;
+	while (i < n)
 	{
-		write (fd, &s[i], 1);
+		if ((unsigned char)returnvalue[i] == (unsigned char)c)
+			return ((void *)&returnvalue[i]);
 		i++;
 	}
+	return (NULL);
 }
-/*
-int	main(void)
-{
-	char	*string = "Je suis un chat.";
-
-	ft_putstr_fd(string, 1);
-}
-*/

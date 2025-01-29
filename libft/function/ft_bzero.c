@@ -1,35 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wlouaked <wlouaked@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wlouaked <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/28 16:39:56 by wlouaked          #+#    #+#             */
-/*   Updated: 2024/05/28 20:24:26 by wlouaked         ###   ########.fr       */
+/*   Created: 2024/06/14 17:20:28 by wlouaked          #+#    #+#             */
+/*   Updated: 2024/06/14 17:21:34 by wlouaked         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../ft_printf.h"
 
-void	ft_putstr_fd(char *s, int fd)
+void	ft_bzero(void *s, size_t n)
 {
-	int	i;
-	int	nbr;
+	char	*string;
+	size_t	i;
 
+	string = s;
 	i = 0;
-	nbr = ft_strlen(s);
-	while (i < nbr)
+	while (i < n)
 	{
-		write (fd, &s[i], 1);
+		string[i] = '\0';
 		i++;
 	}
 }
-/*
-int	main(void)
-{
-	char	*string = "Je suis un chat.";
-
-	ft_putstr_fd(string, 1);
-}
-*/

@@ -1,35 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_flagchar.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wlouaked <wlouaked@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wlouaked <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/28 16:39:56 by wlouaked          #+#    #+#             */
-/*   Updated: 2024/05/28 20:24:26 by wlouaked         ###   ########.fr       */
+/*   Created: 2024/06/14 17:35:54 by wlouaked          #+#    #+#             */
+/*   Updated: 2024/06/14 17:36:01 by wlouaked         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../ft_printf.h"
 
-void	ft_putstr_fd(char *s, int fd)
+void	ft_flagchar(int *i, int *j, va_list args)
 {
-	int	i;
-	int	nbr;
+	char	c;
 
-	i = 0;
-	nbr = ft_strlen(s);
-	while (i < nbr)
-	{
-		write (fd, &s[i], 1);
-		i++;
-	}
+	c = (char)va_arg(args, int);
+	write(1, &c, 1);
+	(*i)++;
+	(*j)++;
 }
-/*
-int	main(void)
-{
-	char	*string = "Je suis un chat.";
-
-	ft_putstr_fd(string, 1);
-}
-*/

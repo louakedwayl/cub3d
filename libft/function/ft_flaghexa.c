@@ -1,35 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_flaghexa.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wlouaked <wlouaked@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/28 16:39:56 by wlouaked          #+#    #+#             */
-/*   Updated: 2024/05/28 20:24:26 by wlouaked         ###   ########.fr       */
+/*   Created: 2024/06/14 17:48:34 by wlouaked          #+#    #+#             */
+/*   Updated: 2024/06/14 17:50:53 by wlouaked         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../ft_printf.h"
 
-void	ft_putstr_fd(char *s, int fd)
+void	ft_flaghexa(int *i, int *j, va_list args, char x)
 {
-	int	i;
-	int	nbr;
+	char	*s;
+	int		count;
 
-	i = 0;
-	nbr = ft_strlen(s);
-	while (i < nbr)
+	s = ft_puthexa(va_arg(args, unsigned int), x);
+	count = 0;
+	while (s[count])
 	{
-		write (fd, &s[i], 1);
-		i++;
+		write(1, &s[count], 1);
+		(*j)++;
+		count++;
 	}
+	free (s);
+	(*i)++;
 }
-/*
-int	main(void)
-{
-	char	*string = "Je suis un chat.";
-
-	ft_putstr_fd(string, 1);
-}
-*/

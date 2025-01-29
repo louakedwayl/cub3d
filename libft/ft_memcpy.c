@@ -1,35 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wlouaked <wlouaked@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/28 16:39:56 by wlouaked          #+#    #+#             */
-/*   Updated: 2024/05/28 20:24:26 by wlouaked         ###   ########.fr       */
+/*   Created: 2024/05/23 14:36:18 by wlouaked          #+#    #+#             */
+/*   Updated: 2024/05/24 20:42:30 by wlouaked         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putstr_fd(char *s, int fd)
+void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
-	int	i;
-	int	nbr;
+	char		*string;
+	char		*string2;
+	size_t		i;
 
+	if (!dest && !src)
+		return (NULL);
+	string = (char *)src;
+	string2 = (char *)dest;
 	i = 0;
-	nbr = ft_strlen(s);
-	while (i < nbr)
+	while (i < n)
 	{
-		write (fd, &s[i], 1);
+		string2[i] = string[i];
 		i++;
 	}
+	return (dest);
 }
-/*
-int	main(void)
-{
-	char	*string = "Je suis un chat.";
-
-	ft_putstr_fd(string, 1);
-}
-*/

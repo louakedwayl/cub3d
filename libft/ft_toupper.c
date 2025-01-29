@@ -1,35 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_toupper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wlouaked <wlouaked@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wlouaked <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/28 16:39:56 by wlouaked          #+#    #+#             */
-/*   Updated: 2024/05/28 20:24:26 by wlouaked         ###   ########.fr       */
+/*   Created: 2024/05/20 17:55:46 by wlouaked          #+#    #+#             */
+/*   Updated: 2024/05/20 18:38:17 by wlouaked         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putstr_fd(char *s, int fd)
+int	ft_toupper(int c)
 {
-	int	i;
-	int	nbr;
-
-	i = 0;
-	nbr = ft_strlen(s);
-	while (i < nbr)
+	if (c >= 'a' && c <= 'z')
 	{
-		write (fd, &s[i], 1);
-		i++;
+		c -= 32;
 	}
+	return (c);
 }
-/*
-int	main(void)
-{
-	char	*string = "Je suis un chat.";
-
-	ft_putstr_fd(string, 1);
-}
-*/

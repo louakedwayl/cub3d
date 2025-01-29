@@ -3,41 +3,85 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: wlouaked <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/29 16:18:46 by ajosse            #+#    #+#             */
-/*   Updated: 2025/01/29 18:38:22 by ajosse           ###   ########.fr       */
+/*   Created: 2025/01/29 20:38:50 by wlouaked          #+#    #+#             */
+/*   Updated: 2025/01/29 20:38:53 by wlouaked         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-int main(int c, char const **v)
+int	ft_create_window(t_data *data)
 {
-
-	t_data	data;
-
-	data.FOV = 60;
-
-	data.map = (char **)malloc(sizeof(char *) * 7);  // 7 map rows
-
-	data.map_height = 7;
-	data.map_width = 8;
-
-	// MAP TEST
-	data.map[0] = "11111111";
-	data.map[1] = "10000001";
-	data.map[2] = "10110001";
-	data.map[3] = "10000S01"; // S for spawn
-	data.map[4] = "10100001";
-	data.map[5] = "10000101";
-	data.map[6] = "11111111";
-
-	raycast(&data);
+	data->mlx = mlx_init();
+	if (!data->mlx)
+	{
+		exit(EXIT_FAILURE);
+	}
+		data->mlx_win = mlx_new_window(data->mlx,
+			WINDOW_WIDTH , WINDOW_HEIGHT, "cub3D");
+	if (!data->mlx_win)
+	{
+		mlx_destroy_display(data->mlx);
+		free(data->mlx);
+		exit (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
+}
 
 
+int set_data_img(t_data *data)
+{
+	char	*line;
+	//char	*string;
+	//char	**retstring;
 
-	(void) c;
-	(void) v;
-	return 0;
+	line = get_next_line(data->fd);
+	while (ft_strncmp("\n", line, 2) == 0)
+	{
+		free (line);
+		line = get_next_line(data->fd);
+	}
+	printf ("%s", line);
+
+	// while (line != NULL)
+	// {
+	// 	string = gnl_strjoin(string, line);
+	// 	if (!string)
+	// 		return (0);
+	// 	free(line);
+	// 	line = get_next_line(fd);
+	// }
+	// retstring = ft_split(string, '\n');
+	// if (!retstring)
+	// 	return (NULL);
+	// return (close(fd), ft_free(&string), retstring);
+	return (EXIT_SUCCESS);
+}
+
+
+int parse(int argc, char **argv, t_data *data)
+{
+	if (check_nbr_arg(argc))
+		return (EXIT_FAILURE);
+	if (check_name_map(argv))
+		return (EXIT_FAILURE);
+	if (open_map(data, argv[1]))
+		return (EXIT_FAILURE);
+	set_data_img(data);
+		return (EXIT_FAILURE);
+	close(data->fd);
+	return (EXIT_SUCCESS);
+}
+
+int	main(int argc, char **argv)
+{
+	t_data data;
+
+	if(parse(argc, argv,&data))
+		return (EXIT_FAILURE);
+	ft_create_window(&data);
+	mlx_loop(data.mlx);
+	return (EXIT_SUCCESS);
 }

@@ -1,35 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_lstmap_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wlouaked <wlouaked@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/28 16:39:56 by wlouaked          #+#    #+#             */
-/*   Updated: 2024/05/28 20:24:26 by wlouaked         ###   ########.fr       */
+/*   Created: 2024/06/05 17:28:54 by wlouaked          #+#    #+#             */
+/*   Updated: 2024/06/05 22:59:48 by wlouaked         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putstr_fd(char *s, int fd)
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	int	i;
-	int	nbr;
+	t_list	*head;
+	t_list	*clone;
+	void	*content;
 
-	i = 0;
-	nbr = ft_strlen(s);
-	while (i < nbr)
+	head = NULL;
+	while (lst)
 	{
-		write (fd, &s[i], 1);
-		i++;
+		content = f(lst->content);
+		clone = ft_lstnew(content);
+		if (clone == NULL)
+			return (del(content), ft_lstclear(&head, del), NULL);
+		ft_lstadd_back(&head, clone);
+		lst = lst->next;
 	}
+	return (head);
 }
-/*
-int	main(void)
-{
-	char	*string = "Je suis un chat.";
-
-	ft_putstr_fd(string, 1);
-}
-*/

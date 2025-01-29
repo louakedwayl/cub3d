@@ -6,11 +6,11 @@
 /*   By: wlouaked <wlouaked@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:49:47 by wlouaked          #+#    #+#             */
-/*   Updated: 2024/06/02 19:51:01 by wlouaked         ###   ########.fr       */
+/*   Updated: 2024/06/14 17:55:18 by wlouaked         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../ft_printf.h"
 
 static void	ft_md(int nb, int clone, int fd);
 static void	ft_translate(int number, int fd);

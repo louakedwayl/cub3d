@@ -1,35 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wlouaked <wlouaked@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/28 16:39:56 by wlouaked          #+#    #+#             */
-/*   Updated: 2024/05/28 20:24:26 by wlouaked         ###   ########.fr       */
+/*   Created: 2024/05/21 19:52:52 by wlouaked          #+#    #+#             */
+/*   Updated: 2024/06/02 19:38:07 by wlouaked         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putstr_fd(char *s, int fd)
+static char	*ft_strcpy(char *dest, const char *src)
 {
 	int	i;
-	int	nbr;
 
 	i = 0;
-	nbr = ft_strlen(s);
-	while (i < nbr)
+	while (src[i])
 	{
-		write (fd, &s[i], 1);
+		dest[i] = src[i];
 		i++;
 	}
+	dest[i] = '\0';
+	return (dest);
 }
-/*
-int	main(void)
-{
-	char	*string = "Je suis un chat.";
 
-	ft_putstr_fd(string, 1);
+char	*ft_strdup(const char *s)
+{
+	char	*string;
+
+	string = malloc(sizeof (char) * ft_strlen(s) + 1);
+	if (!string)
+		return (NULL);
+	ft_strcpy(string, s);
+	return (string);
 }
-*/

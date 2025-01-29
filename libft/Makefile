@@ -1,53 +1,112 @@
-CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3
-
-SRCSFILES =	ft_atoi.c ft_atol.c ft_itoa.c ft_bzero.c ft_calloc.c ft_utils.c ft_utils2.c \
-			char/ft_isalnum.c char/ft_isalpha.c char/ft_isascii.c char/ft_isdigit.c char/ft_isprint.c char/ft_isspace.c char/ft_tolower.c char/ft_toupper.c \
-			mem/ft_memchr.c mem/ft_memcmp.c mem/ft_memcpy.c mem/ft_memmove.c mem/ft_memset.c \
-			ft_putchar_fd.c ft_putendl_fd.c ft_putnbr_fd.c ft_putstr_fd.c \
-			str/ft_split.c str/ft_strcontains.c str/ft_strchr.c str/ft_strdup.c str/ft_striteri.c str/ft_strjoin.c str/ft_strcat.c str/ft_strcpy.c str/ft_strrev.c \
-			str/ft_strlen.c str/ft_strmapi.c str/ft_strcmp.c str/ft_strnstr.c str/ft_strrchr.c str/ft_strtrim.c str/ft_substr.c str/ft_strremove.c str/ft_str_sort.c \
-			list/ft_lstnew.c list/ft_lstadd_front.c list/ft_lstsize.c list/ft_lstlast.c list/ft_lstadd_back.c \
-			list/ft_lstdelone.c list/ft_lstclear.c list/ft_lstiter.c list/ft_lstmap.c list/ft_lst_utils.c list/ft_lstfirst_occurence.c \
-			gnl/get_next_line.c
-
-SRCDIR = ./
-SRCS = $(addprefix $(SRCDIR), $(SRCSFILES))
-OBJDIR = ./build/
-OBJS = $(addprefix $(OBJDIR), $(notdir $(SRCSFILES:.c=.o)))
-DEPS = $(OBJS:.o=.d)
-
-INCLUDES = -I . -I ./gnl/
-
+#Nom de la bibliotheque
 NAME = libft.a
 
+#ficher d'en-tete
+HEAD = libft.h
+
+#Compilateur et option de compilation
+CC = cc
+CFLAGS = -Wall -Werror -Wextra
+
+#listes des fichier sources
+SRC = ft_atoi.c \
+	ft_bzero.c \
+	ft_strlen.c \
+	ft_isdigit.c \
+	ft_isalnum.c \
+	ft_isalpha.c \
+	ft_isascii.c \
+	ft_isprint.c \
+	ft_memset.c \
+	ft_strdup.c \
+	ft_strlcpy.c\
+       	ft_strlen.c \
+	ft_strncmp.c\
+       	ft_tolower.c\
+       	ft_toupper.c\
+       	ft_memcpy.c\
+       	ft_memmove.c\
+	ft_strchr.c\
+	ft_strrchr.c\
+	ft_memchr.c\
+	ft_memcmp.c\
+	ft_calloc.c\
+	ft_itoa.c\
+	ft_putstr_fd.c\
+	ft_putchar_fd.c\
+	ft_putendl_fd.c\
+	ft_putnbr_fd.c\
+	ft_substr.c\
+	ft_strnstr.c\
+	ft_striteri.c\
+	ft_strmapi.c\
+	ft_strjoin.c\
+	ft_strtrim.c\
+	ft_strlcat.c\
+	ft_split.c\
+	ft_lstdelone_bonus.c\
+	ft_lstiter_bonus.c\
+	ft_lstclear_bonus.c\
+	ft_lstmap_bonus.c\
+	function/ft_flagchar.c\
+       function/ft_flagpercent.c\
+       function/ft_flagstring.c\
+       function/ft_putnbr_fd.c\
+       function/ft_put_unsigned_nbr_fd.c\
+       function/ft_flagint.c\
+       function/ft_flagunsignedint.c\
+       function/ft_puthexa.c\
+       function/ft_strlen.c\
+       function/ft_bzero.c\
+       function/ft_flaghexa.c\
+       function/ft_puthexa2.c\
+       function/ft_indicehexa.c\
+       function/ft_flagp.c\
+       ft_printf.c\
+       get_next_line/get_next_line.c\
+       get_next_line/get_next_line_utils.c
+
+SRCBONUS = ft_lstnew_bonus.c\
+	   ft_lstadd_front_bonus.c\
+	   ft_lstsize_bonus.c\
+	   ft_lstlast_bonus.c\
+	   ft_lstadd_back_bonus.c\
+	   ft_lstdelone_bonus.c
+
+# Liste des fichiers objets (générés automatiquement à partir des fichiers sources)
+OBJ = $(SRC:.c=.o)
+
+OBJBONUS = $(SRCBONUS:.c=.o)
+
+# Options pour l'archiveur
+AR = ar		#archiver
+ARFLAGS = -rc	#-r inserer les fichier dans l'archive /   -c cree larchive si elle nexiste pas
+
+# Création de la bibliothèque
 all: $(NAME)
 
-$(NAME): $(OBJS)
-	ar -rcs $(NAME) $(OBJS)
+# Cible par défaut
+$(NAME): $(OBJ)
+	$(AR) $(ARFLAGS) $(NAME) $^
 
-$(OBJDIR)%.o: $(SRCDIR)%.c | $(OBJDIR)
-	$(CC) $(CFLAGS) $(INCLUDES) -MMD -MF $(@:.o=.d) -c $< -o $@
 
-$(OBJDIR)%.o: $(SRCDIR)*/%.c | $(OBJDIR)
-	$(CC) $(CFLAGS) $(INCLUDES) -MMD -MF $(@:.o=.d) -c $< -o $@
+# Règle pour compiler les fichiers objets
+%.o: %.c
+	$(CC) -c $< -o $@
 
-$(OBJDIR):
-	@mkdir -p $(OBJDIR)
+# Suppression des fichiers objets
+clean :
+	rm -f $(OBJ)
 
-clean:
-	rm -f $(OBJS) $(DEPS)
+# Suppression des fichiers objets et de la bibliothèque
+fclean : clean
+	rm  -f $(NAME)
 
-fclean: clean
-	rm -f $(NAME)
+# Reconstruction complète
+re :	fclean all
 
-re: fclean
-	@$(MAKE) --no-print-directory all
+bonus : $(OBJ) $(OBJBONUS)
+	$(AR) $(ARFLAGS) $(NAME) $(OBJ) $(OBJBONUS)
 
--include $(DEPS)
-
-# show a variable value with : make print-VARIABLE
-print-%:
-	@echo $* = $($*)
-
-.PHONY: all clean fclean re
+# Indiquer à make que ces cibles ne sont pas des fichiers
+.PHONY : all bonus clean fclean re

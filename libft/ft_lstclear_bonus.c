@@ -1,35 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_lstclear_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wlouaked <wlouaked@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wlouaked <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/28 16:39:56 by wlouaked          #+#    #+#             */
-/*   Updated: 2024/05/28 20:24:26 by wlouaked         ###   ########.fr       */
+/*   Created: 2024/06/05 16:07:42 by wlouaked          #+#    #+#             */
+/*   Updated: 2024/06/05 16:08:17 by wlouaked         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putstr_fd(char *s, int fd)
+void	ft_lstclear(t_list **lst, void (*del)(void*))
 {
-	int	i;
-	int	nbr;
+	t_list	*clone;
 
-	i = 0;
-	nbr = ft_strlen(s);
-	while (i < nbr)
+	if (lst && *lst)
 	{
-		write (fd, &s[i], 1);
-		i++;
+		while (*lst)
+		{
+			clone = (*lst)->next;
+			ft_lstdelone(*lst, del);
+			(*lst) = clone;
+		}
+		*lst = NULL;
 	}
 }
-/*
-int	main(void)
-{
-	char	*string = "Je suis un chat.";
-
-	ft_putstr_fd(string, 1);
-}
-*/

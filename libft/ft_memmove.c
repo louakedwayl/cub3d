@@ -1,35 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wlouaked <wlouaked@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/28 16:39:56 by wlouaked          #+#    #+#             */
-/*   Updated: 2024/05/28 20:24:26 by wlouaked         ###   ########.fr       */
+/*   Created: 2024/05/23 16:48:53 by wlouaked          #+#    #+#             */
+/*   Updated: 2024/05/24 19:57:36 by wlouaked         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putstr_fd(char *s, int fd)
+void	*ft_memmove(void *dest, const void *src, size_t n)
 {
-	int	i;
-	int	nbr;
+	char		*ptsrc;
+	char		*ptdst;
+	size_t		i;
 
-	i = 0;
-	nbr = ft_strlen(s);
-	while (i < nbr)
+	ptsrc = (char *)src;
+	ptdst = (char *)dest;
+	if (ptdst > ptsrc)
 	{
-		write (fd, &s[i], 1);
-		i++;
+		i = n;
+		while (i > 0)
+		{
+			i--;
+			ptdst[i] = ptsrc[i];
+		}
 	}
+	else if (ptdst < ptsrc)
+	{
+		i = 0;
+		while (i < n)
+		{
+			ptdst[i] = ptsrc[i];
+			i++;
+		}
+	}
+	return (dest);
 }
-/*
-int	main(void)
-{
-	char	*string = "Je suis un chat.";
-
-	ft_putstr_fd(string, 1);
-}
-*/
