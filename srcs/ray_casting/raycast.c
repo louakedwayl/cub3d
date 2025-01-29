@@ -93,5 +93,3 @@ void	raycast(t_data *data)
 
 	free_all_and_exit(data, EXIT_SUCCESS, NULL);
 }
-
-// find . -type f | xargs cat | grep -a llebioda
