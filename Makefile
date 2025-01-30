@@ -6,7 +6,7 @@
 #    By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/29 16:11:50 by ajosse            #+#    #+#              #
-#    Updated: 2025/01/30 14:27:35 by ajosse           ###   ########.fr        #
+#    Updated: 2025/01/30 14:52:46 by ajosse           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ SRCFILES =	main.c \
 			ray_casting/hook.c \
 			ray_casting/init.c \
 			ray_casting/raycast.c \
+			ray_casting/utils.c \
 			
 
 SRCDIR = ./srcs/

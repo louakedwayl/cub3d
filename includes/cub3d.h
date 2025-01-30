@@ -10,6 +10,7 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include <math.h>
 
 # define WINDOW_WIDTH 700
 # define WINDOW_HEIGHT 700
@@ -21,6 +22,8 @@ typedef int	t_bool;
 
 # define EXIT_FAILURE 1
 # define EXIT_SUCCESS 0
+
+# define DEBUG 1
 
 // utils
 typedef enum e_response
@@ -85,9 +88,11 @@ typedef struct s_data
 {
 	t_mlx_data	*mlx_data;
 	char		**map;
+	t_2dpoint	player_pos;
 	int			map_width;
 	int			map_height;
 	int			FOV;
+	int			player_look_direction;
 }	t_data;
 
 //. CORE - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -110,6 +115,9 @@ int				open_map(t_parsing_data *data, char *map);
 
 // draw_simple.c
 void			put_pixel_on_image(void *img, int x, int y, int color);
+void			draw_line(t_data *data, t_2dpoint a, t_2dpoint b, int color);
+void			draw_white_square(t_data *data, t_2dpoint top_left, t_2dpoint top_right, t_2dpoint bot_left, t_2dpoint bot_right);
+void			draw_square_around_playerpos(t_data *data);
 
 // free.c
 void			free_all_and_exit(t_data *data, int exitcode, char *optional_msg);
@@ -123,5 +131,8 @@ t_mlx_data		*init_mlx_data(t_data *data);
 
 // raycast.c
 void			raycast(t_data *data);
+
+// utils.c
+t_2dpoint		make_point(int x_value, int y_value);
 
 #endif

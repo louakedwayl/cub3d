@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:25:36 by ajosse            #+#    #+#             */
-/*   Updated: 2025/01/30 14:25:37 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/01/30 15:02:14 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,14 @@ void	raycast(t_data *data)
 		free_all_and_exit(data, EXIT_FAILURE, "Failed to load mlx data");
 
 	//, BUILD IMAGE
+
+
+	// tests
+
+	draw_square_around_playerpos(data);
+
+	//
+
 
 
 	//. LOAD
