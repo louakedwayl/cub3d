@@ -112,6 +112,7 @@ int				open_map(t_parsing_data *data, char *map);
 //. FOLDER - - - - - - - - - ray_casting - - - - - - - - -
 
 // debug.c
+void			print_point(t_2dpoint point);
 
 // draw_simple.c
 void			put_pixel_on_image(void *img, int x, int y, int color);

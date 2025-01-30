@@ -6,11 +6,17 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 16:18:46 by ajosse            #+#    #+#             */
-/*   Updated: 2025/01/30 15:05:04 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/01/30 19:42:33 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
+
+void	convert_map_coords_to_window_coords(t_data *data, t_2dpoint *point)
+{
+	point->x = (point->x * WINDOW_WIDTH) / data->map_width;
+	point->y = (point->y * WINDOW_HEIGHT) / data->map_height;
+}
 
 void start_game(t_parsing_data *parsing_data)
 {
@@ -34,7 +40,19 @@ void start_game(t_parsing_data *parsing_data)
 	data.map[5] = "10000101";
 	data.map[6] = "11111111";
 
-	data.player_pos = make_point(600, 400); /// A CALCULER RELATIVEMENT A LA WINDOW SIZE ET MAP SIZE
+
+	t_2dpoint	player_pos;
+	player_pos = make_point(6, 4); // (the S on the map)
+
+	convert_map_coords_to_window_coords(&data, &player_pos);
+
+	if (DEBUG)
+	{
+		printf("player spawned in : ");
+		print_point(player_pos);
+	}
+
+	data.player_pos = player_pos;
 	data.player_look_direction = 0;
 
 	raycast(&data);

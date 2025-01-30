@@ -6,8 +6,13 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:20:03 by ajosse            #+#    #+#             */
-/*   Updated: 2025/01/30 14:24:12 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/01/30 19:36:31 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
+
+void	print_point(t_2dpoint point)
+{
+	printf("(%i, %i)\n", point.x, point.y);
+}
