@@ -1,33 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycast.c                                          :+:      :+:    :+:   */
+/*   hook.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/30 14:25:36 by ajosse            #+#    #+#             */
-/*   Updated: 2025/01/30 14:25:37 by ajosse           ###   ########.fr       */
+/*   Created: 2025/01/30 14:18:53 by ajosse            #+#    #+#             */
+/*   Updated: 2025/01/30 14:23:42 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
-void	raycast(t_data *data)
+// function called when hooked top right cross or echap
+int	esc_destroy_all(t_data *data)
 {
-	//* CREATE / INIT
-	data->mlx_data = init_mlx_data(data);
-	if (!data->mlx_data)
-		free_all_and_exit(data, EXIT_FAILURE, "Failed to load mlx data");
-
-	//, BUILD IMAGE
-
-
-	//. LOAD
-	mlx_put_image_to_window(data->mlx_data->mlx, data->mlx_data->win, data->mlx_data->img, 0, 0);
-	mlx_key_hook(data->mlx_data->win, key_hook, data);
-	mlx_hook(data->mlx_data->win, 17, 0, esc_destroy_all, data);
-	mlx_loop(data->mlx_data->mlx);
-
-	//! DESTROY / EXIT
 	free_all_and_exit(data, EXIT_SUCCESS, NULL);
+	return (0);
+}
+
+// All hooks
+int	key_hook(int keycode, t_data *data)
+{
+	if (keycode == 65307)
+		esc_destroy_all(data);
+	return (0);
 }

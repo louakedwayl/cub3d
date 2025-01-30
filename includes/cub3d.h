@@ -46,6 +46,15 @@ typedef struct s_mlx_data
 	void	*img;
 }	t_mlx_data;
 
+typedef struct s_put_pixel_data
+{
+	int		b_pixel;
+	int		size_line;
+	int		endian;
+	int		pixel_pos;
+	int		color;
+}	t_put_pixel_data;
+
 typedef struct s_img {
 	void	*img;
 	char	*addr;
@@ -81,19 +90,38 @@ typedef struct s_data
 	int			FOV;
 }	t_data;
 
+//. CORE - - - - - - - - - - - - - - - - - - - - - - - - -
+
 // main.c
 
 // start_game.c
 void	start_game(t_parsing_data *data);
 
-// FOLDER - - - - - - - - - ray_casting - - - - - - - - -
-
-// raycast.c
-void	raycast(t_data *data);
+//. FOLDER - - - - - - - - - parsing - - - - - - - - - - -
 
 // check_args.c
 int				check_nbr_arg(int argc);
 int 			check_name_map(char **argv);
 int				open_map(t_parsing_data *data, char *map);
+
+//. FOLDER - - - - - - - - - ray_casting - - - - - - - - -
+
+// debug.c
+
+// draw_simple.c
+void			put_pixel_on_image(void *img, int x, int y, int color);
+
+// free.c
+void			free_all_and_exit(t_data *data, int exitcode, char *optional_msg);
+
+// hook.c
+int				esc_destroy_all(t_data *data);
+int				key_hook(int keycode, t_data *data);
+
+// init.c
+t_mlx_data		*init_mlx_data(t_data *data);
+
+// raycast.c
+void			raycast(t_data *data);
 
 #endif

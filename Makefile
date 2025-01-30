@@ -6,7 +6,7 @@
 #    By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/29 16:11:50 by ajosse            #+#    #+#              #
-#    Updated: 2025/01/29 21:37:45 by ajosse           ###   ########.fr        #
+#    Updated: 2025/01/30 14:27:35 by ajosse           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,8 +16,13 @@ CFLAGS = -Wall -Wextra -Werror -g3
 # dir/file.c
 SRCFILES =	main.c \
 			start_game.c \
+			parsing/check_args.c \
+			ray_casting/debug.c \
+			ray_casting/draw_simple.c \
+			ray_casting/free.c \
+			ray_casting/hook.c \
+			ray_casting/init.c \
 			ray_casting/raycast.c \
-			parsing/check_args.c
 			
 
 SRCDIR = ./srcs/
