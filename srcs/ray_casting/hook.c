@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:18:53 by ajosse            #+#    #+#             */
-/*   Updated: 2025/01/31 01:12:26 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/01/31 04:07:48 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,22 +45,22 @@ void move_player(t_data *data, int keycode)
     float side_delta_x = cos(angle_radians + M_PI_2) * move_step_x;  // perpendiculaire
     float side_delta_y = sin(angle_radians + M_PI_2) * move_step_y;  // 
 
-    if (keycode == S_KEY)  // Backward
+    if (keycode == Z_KEY)  // Forward
     {
         data->player_pos.x += delta_x;
         data->player_pos.y += delta_y;
     }
-    if (keycode == Z_KEY)  // Forward
+    if (keycode == S_KEY)  // Backward
     {
         data->player_pos.x -= delta_x;
         data->player_pos.y -= delta_y;
     }
-    if (keycode == D_KEY)  // Right
+    if (keycode == Q_KEY)  // Left
     {
         data->player_pos.x -= side_delta_x;
         data->player_pos.y -= side_delta_y;
     }
-    if (keycode == Q_KEY)  // Left
+    if (keycode == D_KEY)  // Right
     {
         data->player_pos.x += side_delta_x;
         data->player_pos.y += side_delta_y;

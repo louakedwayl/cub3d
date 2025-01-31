@@ -6,41 +6,114 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:25:36 by ajosse            #+#    #+#             */
-/*   Updated: 2025/01/31 04:05:36 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/01/31 06:37:10 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
+int		get_distance(t_2dpoint a, t_2dpoint b)
+{
+    // Calcul de la différence des coordonnées
+    int dx = b.x - a.x;
+    int dy = b.y - a.y;
+
+    // Calcul de la distance euclidienne
+    return (int)sqrt(dx * dx + dy * dy);  // Utilisation de sqrt pour la racine carrée
+}
+
+// big distance = small column    because far
+void	draw_pixel_column(t_data *data, int column, int distance)
+{
+    // Hauteur de l'écran (en pixels)
+    int screen_height = WINDOW_HEIGHT;
+    // La distance de projection (valeur arbitraire, peut être ajustée)
+    float view_distance = 50.0f;  // Distance de la caméra à la scène (fixée ou dynamique)
+
+    // Calcul de la hauteur de la colonne pour la projection 3D
+    float column_height = (screen_height * view_distance) / (float)distance;
+
+    // Calcul de l'offset vertical pour centrer la colonne sur l'écran
+    int top = (screen_height - (int)column_height) / 2;
+    int bottom = top + (int)column_height;
+
+	// printf("top : %i\n", top);
+	// printf("bottom : %i\n", bottom);
+
+	// printf("column : %i\n", column);
+	// printf("screen_height : %i\n", screen_height);
+
+	t_2dpoint x = make_point(column, top);
+	t_2dpoint y = make_point(column, bottom);
+
+	draw_line(data, x, y, 0x7b13a8);
+
+    // // Dessiner la colonne
+    // for (int y = 0; y < screen_height; y++)
+    // {
+    //     if (y < top)
+	// 	{
+    //         put_pixel_on_image(data, column, y, 0x0);  // Fond
+	// 	}
+    //     else if (y >= top && y < bottom)
+	// 	{
+	// 		// printf("wall in : (%i, %i)\n", column, y);
+    //         put_pixel_on_image(data, column, y, 0x7b13a8);  // Mur
+	// 	}
+    //     else
+	// 	{
+    //         put_pixel_on_image(data, column, y, 0x6a4ae8);  // Ciel
+	// 	}
+    // }
+}
+
 void	update_window(t_data *data)
 {
 	// printf("refreshing\n");
+
+	int distance;
+	int column;
+	int start_angle;
+	int end_angle;
 
 	if (data->mlx_data->img)
 		mlx_destroy_image(data->mlx_data->mlx, data->mlx_data->img);
 
 	data->mlx_data->img = mlx_new_image(data->mlx_data->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-	int start_angle = data->player_look_angle - data->FOV/2;
-	int end_angle = data->player_look_angle + data->FOV/2;
+	start_angle = data->player_look_angle - data->FOV/2;
+	end_angle = data->player_look_angle + data->FOV/2;
 
 	// printf("start_angle : %i\n", start_angle);
 	// printf("end_angle : %i\n", end_angle);
 
+	column = 0;
 	while (start_angle < end_angle)
 	{
-		process_raycasting(data, start_angle);
+		distance = process_raycasting(data, start_angle);
+
+		// printf("distance : %i\n", distance);
+
+		if (distance > 10)
+			draw_pixel_column(data, column, distance);
+		
+		// printf("start_angle : %i\n", start_angle);
 
 		start_angle++;
+		column += 10;
 
 		//start_angle += 1000;
 	}
 
-	draw_square_around_playerpos(data);
+	//draw_square_around_playerpos(data);
 
-	draw_map(data); // j'aimerais éviter de le faire à chaque fois vu que c'est fixe
+	//draw_map(data); // j'aimerais éviter de le faire à chaque fois vu que c'est fixe
 
 	mlx_put_image_to_window(data->mlx_data->mlx, data->mlx_data->win, data->mlx_data->img, 0, 0);
+
+	sleep(0.1);
+
+	usleep(1000);
 }
 
 void	draw_map(t_data *data)
@@ -93,6 +166,9 @@ void forward_ray(t_2dpoint_float *ray, int angle)
 // Custom Ray casting
 int process_raycasting(t_data *data, int cast_angle)
 {
+	t_2dpoint	on_window;
+	t_2dpoint	on_map;
+
 	t_2dpoint_float	ray;
 	int				angle;
 
@@ -104,17 +180,28 @@ int process_raycasting(t_data *data, int cast_angle)
 	angle = cast_angle; //data->player_look_angle;
 
 	int i = 0;
-	while (i < 100)
+	while (i < 1000)
     {
 		// printf("%i - ", i);
 		// usleep(100000);
 
 		// printf("player orientation : %i\n", data->player_look_angle);
 		
-		draw_debug_red_square(data, ray);
+		if (DEBUG)
+			draw_debug_red_square(data, ray);
+
 		forward_ray(&ray, angle);
 
-		
+		on_window = point_float_to_int(ray);
+		on_map = point_float_to_int(ray);
+		convert_window_coords_to_map_coords(data, &on_map);
+
+		if (data->map[on_map.x][on_map.y] == '1')
+		{
+			// printf("hit\n");
+			return (get_distance(data->player_pos, on_window));
+		}
+
 		//print_point(ray);
 		i++;
 	}

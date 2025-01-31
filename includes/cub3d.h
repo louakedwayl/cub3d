@@ -40,7 +40,7 @@ typedef int	t_bool;
 #  define M_PI_2 1.5707963267948966
 # endif
 
-# define DEBUG 1
+# define DEBUG 0
 
 // utils
 typedef enum e_response
@@ -124,10 +124,11 @@ typedef struct s_data
 // main.c
 
 // start_game.c
-void	convert_map_coords_to_window_coords(t_data *data, t_2dpoint *point);
-void 	convert_window_coords_to_map_coords(t_data *data, t_2dpoint *point);
-void	convert_map_coords_to_window_coords_float(t_data *data, t_2dpoint_float *point);
-void	start_game(t_parsing_data *data);
+void			convert_map_coords_to_window_coords(t_data *data, t_2dpoint *point);
+void 			convert_window_coords_to_map_coords(t_data *data, t_2dpoint *point);
+void			convert_map_coords_to_window_coords_float(t_data *data, t_2dpoint_float *point);
+t_2dpoint		point_float_to_int(t_2dpoint_float point);
+void			start_game(t_parsing_data *data);
 
 //. FOLDER - - - - - - - - - parsing - - - - - - - - - - -
 
