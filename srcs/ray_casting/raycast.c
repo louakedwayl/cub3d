@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:25:36 by ajosse            #+#    #+#             */
-/*   Updated: 2025/01/31 07:06:05 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/01/31 07:09:10 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,7 @@ void forward_ray(t_2dpoint_float *ray, int angle)
 	// print_point(*ray);
 
     float angle_rad = ((float)angle) * (M_PI / 180.0);
-    float step = 3;  // Un pas plus fin pour la précision
+    float step = 1;  // Un pas plus fin pour la précision
 
     // Calculs avec des flottants
     float new_x = ray->x + cos(angle_rad) * step;
