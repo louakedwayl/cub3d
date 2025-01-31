@@ -58,6 +58,12 @@ typedef struct s_2dpoint
 	int	y;
 }	t_2dpoint;
 
+typedef struct s_2dpoint_float
+{
+	float	x;
+	float	y;
+}	t_2dpoint_float;
+
 // mlx data
 typedef struct s_mlx_data
 {
@@ -119,6 +125,8 @@ typedef struct s_data
 
 // start_game.c
 void	convert_map_coords_to_window_coords(t_data *data, t_2dpoint *point);
+void 	convert_window_coords_to_map_coords(t_data *data, t_2dpoint *point);
+void	convert_map_coords_to_window_coords_float(t_data *data, t_2dpoint_float *point);
 void	start_game(t_parsing_data *data);
 
 //. FOLDER - - - - - - - - - parsing - - - - - - - - - - -
@@ -132,6 +140,7 @@ int				open_map(t_parsing_data *data, char *map);
 
 // debug.c
 void			print_point(t_2dpoint point);
+void			print_point_float(t_2dpoint_float point);
 
 // draw_simple.c
 void			put_pixel_on_image(void *img, int x, int y, int color);
@@ -139,6 +148,7 @@ void			draw_line(t_data *data, t_2dpoint a, t_2dpoint b, int color);
 void			draw_white_square(t_data *data, t_2dpoint top_left, t_2dpoint top_right, t_2dpoint bot_left, t_2dpoint bot_right);
 void			draw_square_around_playerpos(t_data *data);
 void			draw_square_around_point(t_data *data, t_2dpoint point);
+void			draw_debug_red_square(t_data *data, t_2dpoint_float point);
 
 // free.c
 void			free_all_and_exit(t_data *data, int exitcode, char *optional_msg);
@@ -154,9 +164,11 @@ t_mlx_data		*init_mlx_data(t_data *data);
 // raycast.c
 void			update_window(t_data *data);
 void			draw_map(t_data *data);
+int				process_raycasting(t_data *data, int cast_angle);
 void			raycast(t_data *data);
 
 // utils.c
 t_2dpoint		make_point(int x_value, int y_value);
+t_2dpoint_float	make_float_point(float x_value, float y_value);
 
 #endif

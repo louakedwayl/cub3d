@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 16:18:46 by ajosse            #+#    #+#             */
-/*   Updated: 2025/01/31 01:34:57 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/01/31 02:32:14 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,18 @@ void	convert_map_coords_to_window_coords(t_data *data, t_2dpoint *point)
 {
 	point->x = (point->x * WINDOW_WIDTH) / data->map_width;
 	point->y = (point->y * WINDOW_HEIGHT) / data->map_height;
+}
+
+void	convert_map_coords_to_window_coords_float(t_data *data, t_2dpoint_float *point)
+{
+	point->x = (point->x * (float) WINDOW_WIDTH) / (float) data->map_width;
+	point->y = (point->y * (float) WINDOW_HEIGHT) / (float) data->map_height;
+}
+
+void convert_window_coords_to_map_coords(t_data *data, t_2dpoint *point)
+{
+	point->x = (point->x * data->map_width) / WINDOW_WIDTH;
+	point->y = (point->y * data->map_height) / WINDOW_HEIGHT;
 }
 
 void start_game(t_parsing_data *parsing_data)

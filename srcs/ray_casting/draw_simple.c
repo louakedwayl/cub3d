@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:18:41 by ajosse            #+#    #+#             */
-/*   Updated: 2025/01/31 01:35:28 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/01/31 04:01:14 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,4 +111,38 @@ void	draw_square_around_point(t_data *data, t_2dpoint point)
 	t_2dpoint	bot_right = make_point(point.x + size, point.y + size);
 
 	draw_white_square(data, top_left, top_right, bot_left, bot_right);
+}
+
+
+
+
+
+
+
+
+
+
+void	draw_red_square(t_data *data, t_2dpoint top_left, t_2dpoint top_right, t_2dpoint bot_left, t_2dpoint bot_right)
+{
+	int color = 0xc91c1c; //' red
+
+	draw_line(data, top_left, top_right, color);
+	draw_line(data, bot_left, bot_right, color);
+	draw_line(data, top_left, bot_left, color);
+	draw_line(data, top_right, bot_right, color);
+}
+
+void	draw_debug_red_square(t_data *data, t_2dpoint_float point)
+{
+	// printf("player orientation : %i\n", data->player_look_angle);
+
+	int size = 2;
+
+	// Make corners
+	t_2dpoint	top_left = make_point((int) point.x - size, (int) point.y - size);
+	t_2dpoint	top_right = make_point((int) point.x + size, (int) point.y - size);
+	t_2dpoint	bot_left = make_point((int) point.x - size, (int) point.y + size);
+	t_2dpoint	bot_right = make_point((int) point.x + size, (int) point.y + size);
+
+	draw_red_square(data, top_left, top_right, bot_left, bot_right);
 }

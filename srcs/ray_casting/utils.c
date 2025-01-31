@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:52:35 by ajosse            #+#    #+#             */
-/*   Updated: 2025/01/30 14:54:43 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/01/31 04:00:43 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,16 @@
 t_2dpoint	make_point(int x_value, int y_value)
 {
 	t_2dpoint	new;
+
+	new.x = x_value;
+	new.y = y_value;
+	return (new);
+}
+
+// return a t_2dpoint_float with coor (x, y)
+t_2dpoint_float	make_float_point(float x_value, float y_value)
+{
+	t_2dpoint_float	new;
 
 	new.x = x_value;
 	new.y = y_value;
