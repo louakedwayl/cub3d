@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:18:53 by ajosse            #+#    #+#             */
-/*   Updated: 2025/01/31 04:07:48 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/01/31 06:52:59 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,11 +94,11 @@ int	key_hook(int keycode, t_data *data)
 int	mouse_move_hook(int x, int y, t_data *data)
 {
 	static int last_x = 0;
-	static int refresh_count;
-	int refresh_limit = 5;
+	// static int refresh_count;
+	// int refresh_limit = 5;
 	int diff_x;
 
-	diff_x = (x - last_x) / 5;
+	diff_x = (x - last_x);
 
 	data->player_look_angle += diff_x;
 
@@ -110,11 +110,11 @@ int	mouse_move_hook(int x, int y, t_data *data)
 
 	last_x = x;
 
-	refresh_count++;
-	if (refresh_count > refresh_limit)
-		refresh_count = 0;
-	else
-		return (0);
+	// refresh_count++;
+	// if (refresh_count > refresh_limit)
+	// 	refresh_count = 0;
+	// else
+	// 	return (0);
 
 	// printf("refreshing\n");
 

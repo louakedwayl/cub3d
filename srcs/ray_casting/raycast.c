@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:25:36 by ajosse            #+#    #+#             */
-/*   Updated: 2025/01/31 06:37:10 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/01/31 07:06:05 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,14 @@ void	draw_pixel_column(t_data *data, int column, int distance)
 	// printf("screen_height : %i\n", screen_height);
 
 	t_2dpoint x = make_point(column, top);
-	t_2dpoint y = make_point(column, bottom);
+	t_2dpoint y = make_point(column, bottom); // plus grande valeur car en bas
 
-	draw_line(data, x, y, 0x7b13a8);
+	t_2dpoint ceilling = make_point(column, 0);
+	t_2dpoint floor = make_point(column, WINDOW_HEIGHT);
+
+	draw_line(data, x, y, 0x7b13a8);		// mur
+	draw_line(data, y, floor, 0x3a333d);	// sol
+	draw_line(data, ceilling, x, 0x88a6a2); // ciel
 
     // // Dessiner la colonne
     // for (int y = 0; y < screen_height; y++)
@@ -87,6 +92,10 @@ void	update_window(t_data *data)
 	// printf("start_angle : %i\n", start_angle);
 	// printf("end_angle : %i\n", end_angle);
 
+	int i;
+
+	i = 0;
+
 	column = 0;
 	while (start_angle < end_angle)
 	{
@@ -94,13 +103,22 @@ void	update_window(t_data *data)
 
 		// printf("distance : %i\n", distance);
 
+		i = 0;
 		if (distance > 10)
-			draw_pixel_column(data, column, distance);
+		{
+			while (i < 12)
+			{
+				draw_pixel_column(data, column, distance);
+				i++;
+				column++;
+			}
+		}
+		else
+			column += 1;
 		
 		// printf("start_angle : %i\n", start_angle);
 
 		start_angle++;
-		column += 10;
 
 		//start_angle += 1000;
 	}
@@ -196,10 +214,13 @@ int process_raycasting(t_data *data, int cast_angle)
 		on_map = point_float_to_int(ray);
 		convert_window_coords_to_map_coords(data, &on_map);
 
-		if (data->map[on_map.x][on_map.y] == '1')
+		if (data->map_height >= on_map.y && data->map_width >= on_map.x)
 		{
-			// printf("hit\n");
-			return (get_distance(data->player_pos, on_window));
+			if (data->map[on_map.x][on_map.y] == '1')
+			{
+				// printf("hit\n");
+				return (get_distance(data->player_pos, on_window));
+			}
 		}
 
 		//print_point(ray);
