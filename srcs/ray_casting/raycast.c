@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:25:36 by ajosse            #+#    #+#             */
-/*   Updated: 2025/01/31 00:38:14 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/01/31 01:31:55 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,36 @@ void	update_window(t_data *data)
 
 	draw_square_around_playerpos(data);
 
+	draw_map(data); // j'aimerais éviter de le faire à chaque fois vu que c'est fixe
+
 	mlx_put_image_to_window(data->mlx_data->mlx, data->mlx_data->win, data->mlx_data->img, 0, 0);
+}
+
+void	draw_map(t_data *data)
+{
+	t_2dpoint	square_center;
+	int			index;
+	int			row;
+
+	index = 0;
+	row = 0;
+
+	while (row < data->map_height)
+	{
+		index = 0;
+		while (index < data->map_width)
+		{
+			if (data->map[row][index] == '1')
+			{
+				square_center = make_point(index, row);
+				convert_map_coords_to_window_coords(data, &square_center);
+				draw_square_around_point(data, square_center);
+			}
+			index++;
+		}
+		row++;
+	}
+	(void) square_center;
 }
 
 void	raycast(t_data *data)
@@ -33,12 +62,9 @@ void	raycast(t_data *data)
 
 	//, BUILD IMAGE
 
-
-	// tests
-
+	draw_map(data);
 	update_window(data);
 
-	//
 
 
 

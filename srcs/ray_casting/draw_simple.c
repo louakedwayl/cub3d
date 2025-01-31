@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:18:41 by ajosse            #+#    #+#             */
-/*   Updated: 2025/01/31 01:12:34 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/01/31 01:35:28 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,22 @@ void	draw_square_around_playerpos(t_data *data)
     top_right = rotate_point(top_right, data->player_pos, data->player_look_angle);
     bot_left = rotate_point(bot_left, data->player_pos, data->player_look_angle);
     bot_right = rotate_point(bot_right, data->player_pos, data->player_look_angle);
+
+	draw_white_square(data, top_left, top_right, bot_left, bot_right);
+}
+
+
+void	draw_square_around_point(t_data *data, t_2dpoint point)
+{
+	// printf("player orientation : %i\n", data->player_look_angle);
+
+	int size = 44;
+
+	// Make corners
+	t_2dpoint	top_left = make_point(point.x - size, point.y - size);
+	t_2dpoint	top_right = make_point(point.x + size, point.y - size);
+	t_2dpoint	bot_left = make_point(point.x - size, point.y + size);
+	t_2dpoint	bot_right = make_point(point.x + size, point.y + size);
 
 	draw_white_square(data, top_left, top_right, bot_left, bot_right);
 }

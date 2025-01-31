@@ -118,6 +118,7 @@ typedef struct s_data
 // main.c
 
 // start_game.c
+void	convert_map_coords_to_window_coords(t_data *data, t_2dpoint *point);
 void	start_game(t_parsing_data *data);
 
 //. FOLDER - - - - - - - - - parsing - - - - - - - - - - -
@@ -137,6 +138,7 @@ void			put_pixel_on_image(void *img, int x, int y, int color);
 void			draw_line(t_data *data, t_2dpoint a, t_2dpoint b, int color);
 void			draw_white_square(t_data *data, t_2dpoint top_left, t_2dpoint top_right, t_2dpoint bot_left, t_2dpoint bot_right);
 void			draw_square_around_playerpos(t_data *data);
+void			draw_square_around_point(t_data *data, t_2dpoint point);
 
 // free.c
 void			free_all_and_exit(t_data *data, int exitcode, char *optional_msg);
@@ -151,6 +153,7 @@ t_mlx_data		*init_mlx_data(t_data *data);
 
 // raycast.c
 void			update_window(t_data *data);
+void			draw_map(t_data *data);
 void			raycast(t_data *data);
 
 // utils.c
