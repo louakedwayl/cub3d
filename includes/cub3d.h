@@ -11,6 +11,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <math.h>
+# include <X11/Xlib.h>
 
 # define WINDOW_WIDTH 700
 # define WINDOW_HEIGHT 700
@@ -22,6 +23,22 @@ typedef int	t_bool;
 
 # define EXIT_FAILURE 1
 # define EXIT_SUCCESS 0
+
+# define Z_KEY 122
+# define Q_KEY 113
+# define S_KEY 115
+# define D_KEY 100
+
+# define ECHAP_KEY 65307
+# define TOP_RIGHT_CROSS 17
+
+# ifndef M_PI
+#  define M_PI 3.14159265358979323846
+# endif
+
+# ifndef M_PI_2
+#  define M_PI_2 1.5707963267948966
+# endif
 
 # define DEBUG 1
 
@@ -92,7 +109,8 @@ typedef struct s_data
 	int			map_width;
 	int			map_height;
 	int			FOV;
-	int			player_look_direction;
+	int			player_look_angle;
+
 }	t_data;
 
 //. CORE - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -126,11 +144,13 @@ void			free_all_and_exit(t_data *data, int exitcode, char *optional_msg);
 // hook.c
 int				esc_destroy_all(t_data *data);
 int				key_hook(int keycode, t_data *data);
+int				mouse_move_hook(int x, int y, t_data *data);
 
 // init.c
 t_mlx_data		*init_mlx_data(t_data *data);
 
 // raycast.c
+void			update_window(t_data *data);
 void			raycast(t_data *data);
 
 // utils.c

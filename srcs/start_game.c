@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 16:18:46 by ajosse            #+#    #+#             */
-/*   Updated: 2025/01/30 19:42:33 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/01/31 00:39:14 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void start_game(t_parsing_data *parsing_data)
 	}
 
 	data.player_pos = player_pos;
-	data.player_look_direction = 0;
+	data.player_look_angle = 0;
 
 	raycast(&data);
 
