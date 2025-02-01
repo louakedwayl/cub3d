@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:18:53 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/01 03:38:08 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/01 03:53:07 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,23 +94,28 @@ int	key_hook(int keycode, t_data *data)
 int	mouse_move_hook(int x, int y, t_data *data)
 {
 	static int last_x = 0;
+	static int last_y = 0;
 
 	static int refresh_count;
 	int refresh_cooldown = 1; //. 1 mais UTILE flip/flop
 
 	int diff_x;
-
 	diff_x = (x - last_x);
-
 	data->player_look_angle += diff_x;
-
 	if (data->player_look_angle >= 360)
 		data->player_look_angle -= 360;
 	else if (data->player_look_angle < 0)
 		data->player_look_angle += 360;
-
-
 	last_x = x;
+
+	int diff_y;
+	diff_y = (y - last_y);
+	data->player_vertical_look += diff_y;
+	if (data->player_vertical_look >= 90)
+		data->player_vertical_look = 90;
+	else if (data->player_vertical_look < -90)
+		data->player_vertical_look = -90;
+	last_y = y;
 
 	refresh_count++;
 	if (refresh_count > refresh_cooldown)

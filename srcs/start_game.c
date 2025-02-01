@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 16:18:46 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/01 01:03:07 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/01 03:49:03 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ void start_game(t_parsing_data *parsing_data)
 
 	data.player_pos = player_pos;
 	data.player_look_angle = 0;
+	data.player_vertical_look = 0; // milieu
 
 	raycast(&data);
 

@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:25:36 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/01 03:33:56 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/01 03:54:00 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,16 @@ void	draw_pixel_column(t_data *data, int column, int distance)
 	// printf("column : %i\n", column);
 	// printf("screen_height : %i\n", screen_height);
 
-	t_2dpoint x = make_point(column, top);
-	t_2dpoint y = make_point(column, bottom); // plus grande valeur car en bas
+	t_2dpoint a = make_point(column, top);
+	t_2dpoint b = make_point(column, bottom); // plus grande valeur car en bas
 
 	t_2dpoint ceilling = make_point(column, 0);
 	t_2dpoint floor = make_point(column, WINDOW_HEIGHT);
+
+	a.y -= data->player_vertical_look * 5;
+	b.y -= data->player_vertical_look * 5;
+	// ceilling.y -= data->player_vertical_look;
+	// floor.y -= data->player_vertical_look;
 
 	int color;
 
@@ -70,9 +75,11 @@ void	draw_pixel_column(t_data *data, int column, int distance)
 	else if (data->wall_orientation == WEST)
 		color = YELLOW;
 
-	draw_line(data, x, y, color);		// mur
-	draw_line(data, y, floor, 0x3a333d);	// sol
-	draw_line(data, ceilling, x, 0x88a6a2); // ciel
+	draw_line(data, a, b, color);		// mur
+	draw_line(data, b, floor, 0x3a333d);	// sol
+	draw_line(data, ceilling, a, 0x88a6a2); // ciel
+
+	// printf("player vertical look : %i\n", data->player_vertical_look);
 
     // // Dessiner la colonne
     // for (int y = 0; y < screen_height; y++)
@@ -135,7 +142,7 @@ void	update_window(t_data *data)
 		
 		// printf("start_angle : %i\n", start_angle);
 
-		start_angle += 1.0f / (float) (WINDOW_WIDTH / data->FOV);
+		start_angle += 0.9f / (float) (WINDOW_WIDTH / data->FOV);
 
 		//start_angle += 1000;
 	}

@@ -149,6 +149,7 @@ typedef struct s_data
 	int				map_height;
 	int				FOV;
 	int				player_look_angle;
+	int				player_vertical_look;
 	int				debug_color;
 	t_orientation	wall_orientation;
 
