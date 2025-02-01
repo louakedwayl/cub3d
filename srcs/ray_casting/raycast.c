@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:25:36 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/01 03:26:22 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/01 03:33:56 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,9 +147,9 @@ void	update_window(t_data *data)
 
 	mlx_put_image_to_window(data->mlx_data->mlx, data->mlx_data->win, data->mlx_data->img, 0, 0);
 
-	sleep(0.1);
+	// sleep(0.1);
 
-	usleep(1000);
+	// usleep(1000);
 }
 
 void	draw_map(t_data *data)
@@ -204,7 +204,7 @@ void forward_ray(t_2dpoint_float *ray, float angle)
 // Custom Ray casting
 int process_raycasting(t_data *data, float cast_angle)
 {
-	// static int last_color;
+	static int last_orientation = NORTH;
 
 	t_2dpoint_float	ray;
 	t_2dpoint_float	hit_point;
@@ -302,8 +302,7 @@ int process_raycasting(t_data *data, float cast_angle)
 					}
 				}
 
-				static int last_orientation = NORTH;
-
+				// avoid corner bug
 				if (fabs(fabs(hit_point.x - on_map_float.x) - fabs(hit_point.y - on_map_float.y)) <= 2.0f)
 					data->wall_orientation = last_orientation;
 				last_orientation = data->wall_orientation;

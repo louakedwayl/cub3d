@@ -42,7 +42,7 @@ typedef int	t_bool;
 
 # define SQUARE_SIZE 88
 
-# define DEBUG 1
+# define DEBUG 0
 
 // colors
 # define RED 0xff0000
