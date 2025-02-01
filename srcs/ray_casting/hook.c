@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:18:53 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/01 16:34:49 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/01 18:41:23 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,73 +47,82 @@ t_bool	player_is_in_wall(t_data *data)
 	return (FALSE);
 }
 
-// Fonction pour appliquer les déplacements en fonction de l'angle de vue
-void move_player(t_data *data, int keycode)
+void	move_azerty(t_data *data, int keycode)
 {
-    float angle_radians = data->player_look_angle * (M_PI / 180.0);
-    float move_step_x = (WINDOW_WIDTH / 100);
-    float move_step_y = (WINDOW_HEIGHT / 100);
+	if (keycode == Z_KEY)
+	{
+		data->player_pos.x += data->delta_x;
+		data->player_pos.y += data->delta_y;
+	}
+	else if (keycode == S_KEY)
+	{
+		data->player_pos.x -= data->delta_x;
+		data->player_pos.y -= data->delta_y;
+	}
+	else if (keycode == Q_KEY)
+	{
+		data->player_pos.x -= data->side_delta_x;
+		data->player_pos.y -= data->side_delta_y;
+	}
+	else if (keycode == D_KEY)
+	{
+		data->player_pos.x += data->side_delta_x;
+		data->player_pos.y += data->side_delta_y;
+	}
+}
 
-    // TOP / BOT WAYS
-    float delta_x = cos(angle_radians) * move_step_x;
-    float delta_y = sin(angle_radians) * move_step_y;
+void	move_qwerty(t_data *data, int keycode)
+{
+	if (keycode == W_KEY)
+	{
+		data->player_pos.x += data->delta_x;
+		data->player_pos.y += data->delta_y;
+	}
+	else if (keycode == S_KEY)
+	{
+		data->player_pos.x -= data->delta_x;
+		data->player_pos.y -= data->delta_y;
+	}
+	else if (keycode == A_KEY)
+	{
+		data->player_pos.x -= data->side_delta_x;
+		data->player_pos.y -= data->side_delta_y;
+	}
+	else if (keycode == D_KEY)
+	{
+		data->player_pos.x += data->side_delta_x;
+		data->player_pos.y += data->side_delta_y;
+	}
+}
 
-    // SIDEWAYS
-    float side_delta_x = cos(angle_radians + M_PI_2) * move_step_x;  // perpendiculaire
-    float side_delta_y = sin(angle_radians + M_PI_2) * move_step_y;  // 
+void	init_movement_vars(t_data *data)
+{
+	float		angle_radians;
+	float		move_step_x;
+	float		move_step_y;
 
-	t_2dpoint last_position;
+	angle_radians = data->player_look_angle * (M_PI / 180.0);
+	move_step_x = (WINDOW_WIDTH / 100);
+	move_step_y = (WINDOW_HEIGHT / 100);
+	data->delta_x = cos(angle_radians) * move_step_x;
+	data->delta_y = sin(angle_radians) * move_step_y;
+	data->side_delta_x = cos(angle_radians + M_PI_2) * move_step_x;  // perpendiculaire
+	data->side_delta_y = sin(angle_radians + M_PI_2) * move_step_y;  // 
+}
+
+// Fonction pour appliquer les déplacements en fonction de l'angle de vue
+void	move_player(t_data *data, int keycode)
+{
+	t_2dpoint	last_position;
+
 	last_position = data->player_pos;
-
-	//, AZERTY
-	if (keycode == Z_KEY && KEYBOARD_TYPE == AZERTY)  // Forward
-	{
-		data->player_pos.x += delta_x;
-		data->player_pos.y += delta_y;
-	}
-	else if (keycode == S_KEY && KEYBOARD_TYPE == AZERTY)  // Backward
-	{
-		data->player_pos.x -= delta_x;
-		data->player_pos.y -= delta_y;
-	}
-	else if (keycode == Q_KEY && KEYBOARD_TYPE == AZERTY)  // Left
-	{
-		data->player_pos.x -= side_delta_x;
-		data->player_pos.y -= side_delta_y;
-	}
-	else if (keycode == D_KEY && KEYBOARD_TYPE == AZERTY)  // Right
-	{
-		data->player_pos.x += side_delta_x;
-		data->player_pos.y += side_delta_y;
-	}
-
-	//, QWERTY
-	if (keycode == W_KEY && KEYBOARD_TYPE == QWERTY)  // Forward
-	{
-		data->player_pos.x += delta_x;
-		data->player_pos.y += delta_y;
-	}
-	else if (keycode == S_KEY && KEYBOARD_TYPE == QWERTY)  // Backward
-	{
-		data->player_pos.x -= delta_x;
-		data->player_pos.y -= delta_y;
-	}
-	else if (keycode == A_KEY && KEYBOARD_TYPE == QWERTY)  // Left
-	{
-		data->player_pos.x -= side_delta_x;
-		data->player_pos.y -= side_delta_y;
-	}
-	else if (keycode == D_KEY && KEYBOARD_TYPE == QWERTY)  // Right
-	{
-		data->player_pos.x += side_delta_x;
-		data->player_pos.y += side_delta_y;
-	}
-
-
-    // Limiter la position pour qu'elle reste dans les bornes de la fenêtre
-    data->player_pos.x = int_trunc(data->player_pos.x, 0, WINDOW_WIDTH);
-    data->player_pos.y = int_trunc(data->player_pos.y, 0, WINDOW_HEIGHT);
-
+	init_movement_vars(data);
+	if (KEYBOARD_TYPE == AZERTY)
+		move_azerty(data, keycode);
+	else if (KEYBOARD_TYPE == QWERTY)
+		move_qwerty(data, keycode);
+	data->player_pos.x = int_trunc(data->player_pos.x, 0, WINDOW_WIDTH);
+	data->player_pos.y = int_trunc(data->player_pos.y, 0, WINDOW_HEIGHT);
 	if (player_is_in_wall(data))
 	{
 		data->key_hook_active = FALSE;
@@ -121,105 +130,138 @@ void move_player(t_data *data, int keycode)
 		update_window(data);
 		return ;
 	}
+	update_window(data);
+}
 
-    // Mettre à jour la fenêtre après le déplacement
-    update_window(data);
+void	toggle_debug_mode(t_data *data)
+{
+	if (data->debug_mode)
+	{
+		printf("\033[1;31mDebug mode : OFF\033[m\n");
+		data->debug_mode = FALSE;
+	}
+	else
+	{
+		printf("\033[1;31mDebug mode : ON\033[m\n");
+		data->debug_mode = TRUE;
+	}
+	update_window(data);
+}
+
+void	look_up(t_data *data, int sensi, int diff_y)
+{
+	diff_y = -sensi;
+	data->player_vertical_look += diff_y;
+	if (data->player_vertical_look >= 90)
+		data->player_vertical_look = 90;
+	else if (data->player_vertical_look < -90)
+		data->player_vertical_look = -90;
+	data->last_y += -sensi;
+	update_window(data);
+}
+
+void	look_down(t_data *data, int sensi, int diff_y)
+{
+	diff_y = sensi;
+	data->player_vertical_look += diff_y;
+	if (data->player_vertical_look >= 90)
+		data->player_vertical_look = 90;
+	else if (data->player_vertical_look < -90)
+		data->player_vertical_look = -90;
+	data->last_y += sensi;
+	update_window(data);
+}
+
+void	look_right(t_data *data, int sensi, int diff_x)
+{
+	diff_x = sensi;
+	data->player_look_angle += diff_x;
+	if (data->player_look_angle >= 360)
+		data->player_look_angle -= 360;
+	else if (data->player_look_angle < 0)
+		data->player_look_angle += 360;
+	data->last_x += sensi;
+	update_window(data);
+}
+
+void	look_left(t_data *data, int sensi, int diff_x)
+{
+	diff_x = -sensi;
+	data->player_look_angle += diff_x;
+	if (data->player_look_angle >= 360)
+		data->player_look_angle -= 360;
+	else if (data->player_look_angle < 0)
+		data->player_look_angle += 360;
+	data->last_x += -sensi;
+	update_window(data);
 }
 
 // hooks
 int	key_hook(int keycode, t_data *data)
 {
+	int	diff_x;
+	int	diff_y;
+	int	sensi;
+
+	diff_x = 0;
+	diff_y = 0;
+	sensi = 10;
 	if (data->key_hook_active == FALSE)
 		return 0;
 
 	// if (data->debug_mode)
 	// printf("%i pressed\n", keycode);
 
-	int diff_x;
-	int diff_y;
-	int sensi = 10;
-
-
 	if (keycode == ECHAP_KEY)
 		esc_destroy_all(data);
 
 	else if (keycode == KEY_TAB)
-	{
-		if (data->debug_mode)
-		{
-			printf("\033[1;31mDebug mode : OFF\033[m\n");
-			data->debug_mode = FALSE;
-		}
-		else
-		{
-			printf("\033[1;31mDebug mode : ON\033[m\n");
-			data->debug_mode = TRUE;
-		}
-		update_window(data);
-	}
+		toggle_debug_mode(data);
 
 	else if (keycode == Z_KEY || keycode == Q_KEY || keycode == S_KEY || keycode == D_KEY || keycode == W_KEY || keycode == A_KEY)
 		move_player(data, keycode);
 
 	else if (keycode == TOP_ARROW)
-	{
-		//, VERTICAL
-		diff_y = -sensi;
-		data->player_vertical_look += diff_y;
-		if (data->player_vertical_look >= 90)
-			data->player_vertical_look = 90;
-		else if (data->player_vertical_look < -90)
-			data->player_vertical_look = -90;
-		data->last_y += -sensi;
-
-		update_window(data);
-	}
+		look_up(data, sensi, diff_y);
 
 	else if (keycode == BOTTOM_ARROW)
-	{
-		//, VERTICAL
-		diff_y = sensi;
-		data->player_vertical_look += diff_y;
-		if (data->player_vertical_look >= 90)
-			data->player_vertical_look = 90;
-		else if (data->player_vertical_look < -90)
-			data->player_vertical_look = -90;
-		data->last_y += sensi;
-
-		update_window(data);
-	}
+		look_down(data, sensi, diff_y);
 
 	else if (keycode == LEFT_ARROW)
-	{
-		//, HORIZONTAL
-		diff_x = -sensi;
-		data->player_look_angle += diff_x;
-		if (data->player_look_angle >= 360)
-			data->player_look_angle -= 360;
-		else if (data->player_look_angle < 0)
-			data->player_look_angle += 360;
-		data->last_x += -sensi;
-
-		update_window(data);
-	}
+		look_left(data, sensi, diff_x);
 
 	else if (keycode == RIGHT_ARROW)
-	{
-		//, HORIZONTAL
-		diff_x = sensi;
-		data->player_look_angle += diff_x;
-		if (data->player_look_angle >= 360)
-			data->player_look_angle -= 360;
-		else if (data->player_look_angle < 0)
-			data->player_look_angle += 360;
-		data->last_x += sensi;
+		look_right(data, sensi, diff_x);
 
-		update_window(data);
-	}
 
 	return (0);
 }
 
+void	look_horizontal(t_data *data, int x)
+{
+	int	diff_x;
+
+	diff_x = (x - data->last_x);
+	data->player_look_angle += diff_x;
+	if (data->player_look_angle >= 360)
+		data->player_look_angle -= 360;
+	else if (data->player_look_angle < 0)
+		data->player_look_angle += 360;
+	data->last_x = x;
+}
+
+void	look_vertical(t_data *data, int y)
+{
+	int diff_y;
+
+	diff_y = (y - data->last_y);
+	data->player_vertical_look += diff_y;
+	if (data->player_vertical_look >= 90)
+		data->player_vertical_look = 90;
+	else if (data->player_vertical_look < -90)
+		data->player_vertical_look = -90;
+	data->last_y = y;
+}
 
 // hooks mouse SIDE MOVEMENT ONLY
 int	mouse_move_hook(int x, int y, t_data *data)
@@ -239,24 +281,10 @@ int	mouse_move_hook(int x, int y, t_data *data)
 	int refresh_cooldown = 1; //. 1 mais UTILE flip/flop
 
 	//, HORIZONTAL
-	int diff_x;
-	diff_x = (x - data->last_x);
-	data->player_look_angle += diff_x;
-	if (data->player_look_angle >= 360)
-		data->player_look_angle -= 360;
-	else if (data->player_look_angle < 0)
-		data->player_look_angle += 360;
-	data->last_x = x;
+	look_horizontal(data, x);
 
 	//, VERTICAL
-	int diff_y;
-	diff_y = (y - data->last_y);
-	data->player_vertical_look += diff_y;
-	if (data->player_vertical_look >= 90)
-		data->player_vertical_look = 90;
-	else if (data->player_vertical_look < -90)
-		data->player_vertical_look = -90;
-	data->last_y = y;
+	look_vertical(data, y);
 
 	// printf("b player_look_angle : %f\n", (float)data->player_look_angle);
 
@@ -269,6 +297,5 @@ int	mouse_move_hook(int x, int y, t_data *data)
 	// printf("refreshing\n");
 
 	update_window(data);
-	(void) y;
 	return (0);
 }

@@ -6,44 +6,14 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 17:17:49 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/01 17:18:39 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/01 18:02:54 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
-// big distance = small column    because far
-void	draw_pixel_column(t_data *data, int column, int distance)
+int	choose_color(t_data *data)
 {
-    // Hauteur de l'écran (en pixels)
-    int screen_height = WINDOW_HEIGHT;
-    // La distance de projection (valeur arbitraire, peut être ajustée)
-    float view_distance = 50.0f;  // Distance de la caméra à la scène (fixée ou dynamique)
-
-    // Calcul de la hauteur de la colonne pour la projection 3D
-    float column_height = (screen_height * view_distance) / (float)distance;
-
-    // Calcul de l'offset vertical pour centrer la colonne sur l'écran
-    int top = (screen_height - (int)column_height) / 2;
-    int bottom = top + (int)column_height;
-
-	// printf("top : %i\n", top);
-	// printf("bottom : %i\n", bottom);
-
-	// printf("column : %i\n", column);
-	// printf("screen_height : %i\n", screen_height);
-
-	t_2dpoint a = make_point(column, top);
-	t_2dpoint b = make_point(column, bottom); // plus grande valeur car en bas
-
-	t_2dpoint ceilling = make_point(column, 0);
-	t_2dpoint floor = make_point(column, WINDOW_HEIGHT);
-
-	a.y -= data->player_vertical_look * 5;
-	b.y -= data->player_vertical_look * 5;
-	// ceilling.y -= data->player_vertical_look;
-	// floor.y -= data->player_vertical_look;
-
 	int color;
 
 	if (data->wall_orientation == NORTH)
@@ -52,12 +22,43 @@ void	draw_pixel_column(t_data *data, int column, int distance)
 		color = PURPLE;
 	else if (data->wall_orientation == EAST)
 		color = BLUE;
-	else // if (data->wall_orientation == WEST)
+	else
 		color = YELLOW;
+	return (color);
+}
 
-	draw_line(data, a, b, color);		// mur
-	draw_line(data, b, floor, 0x3a333d);	// sol
-	draw_line(data, ceilling, a, 0x88a6a2); // ciel
+// big distance = small column    because far
+void	draw_pixel_column(t_data *data, int column, int distance)
+{
+
+	data->draw_data.screen_height = WINDOW_HEIGHT;
+	data->draw_data.view_distance = 50.0f;
+	data->draw_data.column_height = (data->draw_data.screen_height * data->draw_data.view_distance) / (float)distance;
+	data->draw_data.top = (data->draw_data.screen_height - (int)data->draw_data.column_height) / 2;
+	data->draw_data.bottom = data->draw_data.top + (int)data->draw_data.column_height;
+
+	data->draw_data.a = make_point(column, data->draw_data.top);
+	data->draw_data.b = make_point(column, data->draw_data.bottom); // plus grande valeur car en bas
+
+	data->draw_data.ceilling = make_point(column, 0);
+	data->draw_data.floor = make_point(column, WINDOW_HEIGHT);
+
+	// printf("top : %i\n", top);
+	// printf("bottom : %i\n", bottom);
+
+	// printf("column : %i\n", column);
+	// printf("screen_height : %i\n", screen_height);
+
+	data->draw_data.a.y -= data->player_vertical_look * 5;
+	data->draw_data.b.y -= data->player_vertical_look * 5;
+	// ceilling.y -= data->player_vertical_look;
+	// floor.y -= data->player_vertical_look;
+
+	data->draw_data.color = choose_color(data);
+
+	draw_line(data, data->draw_data.a, data->draw_data.b, data->draw_data.color);		// mur
+	draw_line(data, data->draw_data.b, data->draw_data.floor, 0x3a333d);	// sol
+	draw_line(data, data->draw_data.ceilling, data->draw_data.a, 0x88a6a2); // ciel
 
 	// printf("player vertical look : %i\n", data->player_vertical_look);
 

@@ -153,10 +153,24 @@ typedef struct s_parsing_data
 	t_img		img_east;
 }				t_parsing_data;
 
+typedef struct s_column_draw_data
+{
+	int screen_height;
+	float view_distance;
+	float column_height;
+	int top;
+	int bottom;
+	t_2dpoint a;
+	t_2dpoint b; // plus grande valeur car en bas
+	t_2dpoint ceilling;
+	t_2dpoint floor;
+	int color;
+}	t_column_draw_data;
+
 typedef struct s_raycast_data
 {
-	int debug_print_each; // ça en print 1 tous les x step
-	int debug_print_limit; // ça en print 1 sur x
+	int debug_print_each;
+	int debug_print_limit;
 
 	t_2dpoint_float	ray;
 	t_2dpoint_float	hit_point;
@@ -175,30 +189,37 @@ typedef struct s_raycast_data
 
 typedef struct s_data
 {
-	t_mlx_data		*mlx_data;
-	char			**map;
-	t_2dpoint		player_pos;
-	int				map_width;
-	int				map_height;
-	int				FOV;
-	int				player_look_angle;
-	int				player_vertical_look;
-	int				debug_color;
-	int				last_x;
-	int				last_y;
+	t_mlx_data			*mlx_data;
+	char				**map;
+	t_2dpoint			player_pos;
+	int					map_width;
+	int					map_height;
+	int					FOV;
+	int					player_look_angle;
+	int					player_vertical_look;
+	int					debug_color;
+	int					last_x;
+	int					last_y;
 
-	t_orientation	wall_orientation;
-	float			hit_part;
+	t_orientation		wall_orientation;
+	float				hit_part;
 
-	t_bool			mode_mini;
-	int				mini_scale;
-	int				mini_offset;
-	t_bool			key_hook_active;
-	t_bool			debug_mode;
+	t_bool				mode_mini;
+	int					mini_scale;
+	int					mini_offset;
+	t_bool				key_hook_active;
+	t_bool				debug_mode;
 
-	float			square_size;
+	float				square_size;
 
-	t_raycast_data	rc;
+	t_raycast_data		rc;
+	t_column_draw_data	draw_data;
+
+	float				delta_x;
+	float				delta_y;
+	float				side_delta_x;
+	float				side_delta_y;
+
 }	t_data;
 
 //. CORE - - - - - - - - - - - - - - - - - - - - - - - - -

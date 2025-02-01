@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:25:36 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/01 17:34:34 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/01 17:51:39 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,136 +33,140 @@ void forward_ray(t_2dpoint_float *ray, float angle)
 	// print_point(*ray);
 }
 
+void	init_raycast_vars(t_data *data)
+{
+	data->rc.print_limit_count++;
+	if (data->rc.print_limit_count > data->rc.debug_print_limit)
+	{
+		data->rc.print_limit_count = 0;
+	}
+	else
+		data->rc.print_limit_count++;
+	data->rc.x = (float)data->player_pos.x;
+	data->rc.y = (float)data->player_pos.y;
+	data->rc.ray = make_float_point(data->rc.x, data->rc.y);
+	data->rc.i = 0;
+}
+
+void	update_ray(t_data *data, float cast_angle)
+{
+	if (data->debug_mode && data->rc.i % data->rc.debug_print_each == 0 && data->rc.print_limit_count == data->rc.debug_print_limit)
+	{
+		data->debug_color = 0xc91c1c; // red
+		draw_debug_square(data, data->rc.ray, 2);
+	}
+	if (data->mode_mini && data->rc.i % data->rc.debug_print_each == 0 && data->rc.print_limit_count == data->rc.debug_print_limit)
+	{
+		data->debug_color = 0xc91c1c; // red
+		draw_debug_square(data, data->rc.ray, 1);
+	}
+	forward_ray(&data->rc.ray, cast_angle);
+	data->rc.hit_point = data->rc.ray; // point_float_to_int(ray);
+	data->rc.on_map_float = data->rc.ray; // point_float_to_int(ray);
+	convert_window_coords_to_map_coords_float(data, &data->rc.on_map_float);
+	data->rc.on_map = point_float_to_int(data->rc.on_map_float);
+}
+
+void	setup_collision_vars(t_data *data)
+{
+	// printf("hit\n");
+	//. COLLISION AXE
+	// hit_point;
+
+	convert_map_coords_to_window_coords(data, &data->rc.on_map);
+	data->rc.on_map.x += data->square_size / 2.0f;
+	data->rc.on_map.y += data->square_size / 2.0f;
+	data->rc.on_map_float = make_float_point((float)data->rc.on_map.x, (float)data->rc.on_map.y);
+
+	// printf("x\n");
+	// print_point(on_map);
+	// print_point(hit_point);
+
+	if (data->debug_mode)
+	{
+		data->debug_color = ORANGE;
+		draw_debug_square(data, data->rc.on_map_float, 5);
+	}
+}
+
+// EAST WEST
+void	get_vertical_hit_infos(t_data *data)
+{
+	if (data->rc.hit_point.x > data->rc.on_map_float.x)
+	{
+		data->debug_color = 0x00ccff; // blue
+		data->wall_orientation = EAST;
+	}
+	else
+	{
+		data->debug_color = 0xffff00; // yellow
+		data->wall_orientation = WEST;
+	}
+	data->hit_part = (data->rc.hit_point.y - data->rc.on_map_float.y);
+}
+
+// NORTH SOUTH
+void	get_horizontal_hit_infos(t_data *data)
+{
+	if (data->rc.hit_point.y < data->rc.on_map_float.y)
+	{
+		data->debug_color = 0x9900ff; // purple
+		data->wall_orientation = SOUTH;
+	}
+	else
+	{
+		data->debug_color = 0xffffff; // white
+		data->wall_orientation = NORTH;
+	}
+	data->hit_part = (data->rc.hit_point.x - data->rc.on_map_float.x);
+}
+
+void	get_collision_infos(t_data *data)
+{
+	setup_collision_vars(data);
+
+	if (fabs(data->rc.hit_point.x - data->rc.on_map_float.x) > fabs(data->rc.hit_point.y - data->rc.on_map_float.y))  
+		get_vertical_hit_infos(data);
+	else
+		get_horizontal_hit_infos(data);
+
+	// if (data->debug_mode)
+	// 	printf("hit part : %f\n", data->hit_part);
+
+	// avoid corner bug
+	if (fabs(fabs(data->rc.hit_point.x - data->rc.on_map_float.x) - fabs(data->rc.hit_point.y - data->rc.on_map_float.y)) <= 2.0f)
+		data->wall_orientation = data->rc.last_orientation;
+	data->rc.last_orientation = data->wall_orientation;
+
+
+	if (data->debug_mode)
+		draw_debug_square(data, data->rc.ray, 2);
+}
+
 // Custom Ray casting
 int process_raycasting(t_data *data, float cast_angle)
 {
-	static int last_orientation = NORTH;
+	init_raycast_vars(data);
 
-	static int print_limit_count = 0; // ça en print 1 sur 10
-
-	int debug_print_each = 60; // ça en print 1 tous les x step
-	int debug_print_limit = 50; // ça en print 1 sur x
-
-
-	print_limit_count++;
-	if (print_limit_count > debug_print_limit)
-	{
-		print_limit_count = 0;
-	}
-	else
-		print_limit_count++;
-
-	t_2dpoint_float	ray;
-	t_2dpoint_float	hit_point;
-	t_2dpoint_float	on_map_float;
-	t_2dpoint		on_map;
-
-	float x = (float)data->player_pos.x;
-	float y = (float)data->player_pos.y;
-	ray = make_float_point(x, y);
-
-	int render_distance = 100000;
-
-	int i = 0;
-	while (i < render_distance)
+	while (data->rc.i < data->rc.render_distance)
     {
 		// printf("%i - ", i);
 		// usleep(100000);
 
 		// printf("player orientation : %i\n", data->player_look_angle);
 
-		if (data->debug_mode && i % debug_print_each == 0 && print_limit_count == debug_print_limit)
+		update_ray(data, cast_angle);
+
+		if (data->map_height >= data->rc.on_map.y && data->map_width >= data->rc.on_map.x)
 		{
-			data->debug_color = 0xc91c1c; // red
-			draw_debug_square(data, ray, 2);
-		}
-
-		if (data->mode_mini && i % debug_print_each == 0 && print_limit_count == debug_print_limit)
-		{
-			data->debug_color = 0xc91c1c; // red
-			draw_debug_square(data, ray, 1);
-		}
-
-		forward_ray(&ray, cast_angle);
-
-		hit_point = ray; // point_float_to_int(ray);
-		on_map_float = ray; // point_float_to_int(ray);
-		convert_window_coords_to_map_coords_float(data, &on_map_float);
-
-		on_map = point_float_to_int(on_map_float);
-
-		if (data->map_height >= on_map.y && data->map_width >= on_map.x)
-		{
-			if (data->map[on_map.y][on_map.x] == '1')
+			if (data->map[data->rc.on_map.y][data->rc.on_map.x] == '1')
 			{
-				// printf("hit\n");
+				get_collision_infos(data);
 
-                //. COLLISION AXE
-				
-				// hit_point;
-
-				convert_map_coords_to_window_coords(data, &on_map);
-
-				on_map.x += data->square_size / 2.0f;
-				on_map.y += data->square_size / 2.0f;
-
-				on_map_float = make_float_point((float)on_map.x, (float)on_map.y);
-
-				// printf("x\n");
-				// print_point(on_map);
-				// print_point(hit_point);
-
-				if (data->debug_mode)
-				{
-					data->debug_color = ORANGE;
-					draw_debug_square(data, on_map_float, 5);
-				}
-
-				if (fabs(hit_point.x - on_map_float.x) > fabs(hit_point.y - on_map_float.y))  
-				{
-					if (hit_point.x > on_map_float.x)
-					{
-						data->debug_color = 0x00ccff; // blue
-						data->wall_orientation = EAST;
-					}
-					else
-					{
-						data->debug_color = 0xffff00; // yellow
-						data->wall_orientation = WEST;
-					}
-					data->hit_part = (hit_point.y - on_map_float.y);
-				}
-				else  
-				{
-					if (hit_point.y < on_map_float.y)
-					{
-						data->debug_color = 0x9900ff; // purple
-						data->wall_orientation = SOUTH;
-					}
-					else
-					{
-						data->debug_color = 0xffffff; // white
-						data->wall_orientation = NORTH;
-					}
-					data->hit_part = (hit_point.x - on_map_float.x);
-				}
-
-				// if (data->debug_mode)
-				// 	printf("hit part : %f\n", data->hit_part);
-
-				// avoid corner bug
-				if (fabs(fabs(hit_point.x - on_map_float.x) - fabs(hit_point.y - on_map_float.y)) <= 2.0f)
-					data->wall_orientation = last_orientation;
-				last_orientation = data->wall_orientation;
-
-
-				if (data->debug_mode)
-					draw_debug_square(data, ray, 2);
-
-				return (get_distance(data->player_pos, point_float_to_int(hit_point)));
+				return (get_distance(data->player_pos, point_float_to_int(data->rc.hit_point)));
 			}
 		}
-		i++;
+		data->rc.i++;
 	}
 
 	return 0;
