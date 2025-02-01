@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:25:36 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/01 06:29:54 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/01 06:59:22 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ void	update_window(t_data *data)
 		// printf("distance : %i\n", distance);
 
 		if (!data->debug_mode)
-			if (distance > 10)
+			if (distance > 4)
 				draw_pixel_column(data, column, distance); //, DRAW
 
 		column++;
@@ -160,6 +160,7 @@ void	update_window(t_data *data)
 
 	mlx_put_image_to_window(data->mlx_data->mlx, data->mlx_data->win, data->mlx_data->img, 0, 0);
 	
+	data->key_hook_active = TRUE;
 	// sleep(0.1);
 
 	// usleep(1000);
@@ -248,7 +249,7 @@ int process_raycasting(t_data *data, float cast_angle)
 	float y = (float)data->player_pos.y;
 	ray = make_float_point(x, y);
 
-	int render_distance = 1000;
+	int render_distance = 100000;
 
 	int i = 0;
 	while (i < render_distance)

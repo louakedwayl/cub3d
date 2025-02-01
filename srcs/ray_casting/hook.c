@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:18:53 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/01 06:35:16 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/01 06:56:08 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,23 @@ int	esc_destroy_all(t_data *data)
 	return (0);
 }
 
+t_bool	player_is_in_wall(t_data *data)
+{
+	t_2dpoint	on_map;
+
+	on_map = make_point(data->player_pos.x, data->player_pos.y);
+	convert_window_coords_to_map_coords(data, &on_map);
+
+	if (data->map_height >= on_map.y && data->map_width >= on_map.x)
+	{
+		if (data->map[on_map.y][on_map.x] == '1')
+		{
+			return (TRUE);
+		}
+	}
+
+	return (FALSE);
+}
 
 // Fonction pour appliquer les déplacements en fonction de l'angle de vue
 void move_player(t_data *data, int keycode)
@@ -44,6 +61,9 @@ void move_player(t_data *data, int keycode)
     // SIDEWAYS
     float side_delta_x = cos(angle_radians + M_PI_2) * move_step_x;  // perpendiculaire
     float side_delta_y = sin(angle_radians + M_PI_2) * move_step_y;  // 
+
+	t_2dpoint last_position;
+	last_position = data->player_pos;
 
     if (keycode == Z_KEY)  // Forward
     {
@@ -69,6 +89,14 @@ void move_player(t_data *data, int keycode)
     // Limiter la position pour qu'elle reste dans les bornes de la fenêtre
     data->player_pos.x = int_trunc(data->player_pos.x, 0, WINDOW_WIDTH);
     data->player_pos.y = int_trunc(data->player_pos.y, 0, WINDOW_HEIGHT);
+
+	if (player_is_in_wall(data))
+	{
+		data->key_hook_active = FALSE;
+		data->player_pos = last_position;
+		update_window(data);
+		return ;
+	}
 
     // Mettre à jour la fenêtre après le déplacement
     update_window(data);
