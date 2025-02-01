@@ -40,7 +40,31 @@ typedef int	t_bool;
 #  define M_PI_2 1.5707963267948966
 # endif
 
+# define SQUARE_SIZE 88
+
 # define DEBUG 1
+
+// colors
+# define RED 0xff0000
+# define GREEN 0x00ff00
+# define BLUE 0x0000ff
+# define CYAN 0x00ffff
+# define MAGENTA 0xff00ff
+# define YELLOW 0xffff00
+# define ORANGE 0xffa500
+# define PURPLE 0x800080
+# define PINK 0xffc0cb
+# define BROWN 0x8b4513
+# define WHITE 0xffffff
+# define BLACK 0x000000
+# define GRAY 0x808080
+# define LIGHT_GRAY 0xd3d3d3
+# define DARK_GRAY 0x404040
+# define GOLD 0xffd700
+# define SILVER 0xc0c0c0
+# define NAVY 0x000080
+# define TEAL 0x008080
+# define LIME 0x32cd32
 
 // utils
 typedef enum e_response
@@ -161,7 +185,7 @@ void			draw_line(t_data *data, t_2dpoint a, t_2dpoint b, int color);
 void			draw_white_square(t_data *data, t_2dpoint top_left, t_2dpoint top_right, t_2dpoint bot_left, t_2dpoint bot_right);
 void			draw_square_around_playerpos(t_data *data);
 void			draw_square_around_point(t_data *data, t_2dpoint point);
-void			draw_debug_square(t_data *data, t_2dpoint_float point);
+void			draw_debug_square(t_data *data, t_2dpoint_float point, int size);
 
 // free.c
 void			free_all_and_exit(t_data *data, int exitcode, char *optional_msg);
@@ -177,7 +201,7 @@ t_mlx_data		*init_mlx_data(t_data *data);
 // raycast.c
 void			update_window(t_data *data);
 void			draw_map(t_data *data);
-int				process_raycasting(t_data *data, int cast_angle);
+int				process_raycasting(t_data *data, float cast_angle);
 void			raycast(t_data *data);
 
 // utils.c

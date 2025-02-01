@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:18:41 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/01 01:01:33 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/01 02:26:02 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void	draw_square_around_point(t_data *data, t_2dpoint point)
 {
 	// printf("player orientation : %i\n", data->player_look_angle);
 
-	int size = 44;
+	int size = SQUARE_SIZE / 2;
 
 	// Make corners
 	t_2dpoint	top_left = make_point(point.x - size, point.y - size);
@@ -130,11 +130,9 @@ void	draw_colored_square(t_data *data, t_2dpoint top_left, t_2dpoint top_right, 
 	draw_line(data, top_right, bot_right, data->debug_color);
 }
 
-void	draw_debug_square(t_data *data, t_2dpoint_float point)
+void	draw_debug_square(t_data *data, t_2dpoint_float point, int size)
 {
 	// printf("player orientation : %i\n", data->player_look_angle);
-
-	int size = 2;
 
 	// Make corners
 	t_2dpoint	top_left = make_point((int) point.x - size, (int) point.y - size);

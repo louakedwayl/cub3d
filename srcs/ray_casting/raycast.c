@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:25:36 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/01 01:19:00 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/01 03:26:22 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,18 @@ void	draw_pixel_column(t_data *data, int column, int distance)
 	t_2dpoint ceilling = make_point(column, 0);
 	t_2dpoint floor = make_point(column, WINDOW_HEIGHT);
 
-	draw_line(data, x, y, 0x7b13a8);		// mur
+	int color;
+
+	if (data->wall_orientation == NORTH)
+		color = LIGHT_GRAY;
+	else if (data->wall_orientation == SOUTH)
+		color = PURPLE;
+	else if (data->wall_orientation == EAST)
+		color = BLUE;
+	else if (data->wall_orientation == WEST)
+		color = YELLOW;
+
+	draw_line(data, x, y, color);		// mur
 	draw_line(data, y, floor, 0x3a333d);	// sol
 	draw_line(data, ceilling, x, 0x88a6a2); // ciel
 
@@ -88,16 +99,16 @@ void	update_window(t_data *data)
 
 	int distance;
 	int column;
-	int start_angle;
-	int end_angle;
+	float start_angle;
+	float end_angle;
 
 	if (data->mlx_data->img)
 		mlx_destroy_image(data->mlx_data->mlx, data->mlx_data->img);
 
 	data->mlx_data->img = mlx_new_image(data->mlx_data->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-	start_angle = data->player_look_angle - data->FOV/2;
-	end_angle = data->player_look_angle + data->FOV/2;
+	start_angle = (float) (data->player_look_angle - data->FOV/2);
+	end_angle = (float) (data->player_look_angle + data->FOV/2);
 
 	// printf("start_angle : %i\n", start_angle);
 	// printf("end_angle : %i\n", end_angle);
@@ -106,6 +117,8 @@ void	update_window(t_data *data)
 
 	i = 0;
 
+	// int range = (int) start_angle - (int) end_angle;
+
 	column = 0;
 	while (start_angle < end_angle)
 	{
@@ -113,29 +126,24 @@ void	update_window(t_data *data)
 
 		// printf("distance : %i\n", distance);
 
-		i = 0;
-		if (distance > 10)
-		{
-			while (i < 12)
-			{
-				// draw_pixel_column(data, column, distance); //, DRAW
-				i++;
-				column++;
-			}
-		}
-		else
-			column += 1;
+		if (!DEBUG)
+			if (distance > 10)
+				draw_pixel_column(data, column, distance); //, DRAW
+
+		i++;
+		column++;
 		
 		// printf("start_angle : %i\n", start_angle);
 
-		start_angle++;
+		start_angle += 1.0f / (float) (WINDOW_WIDTH / data->FOV);
 
 		//start_angle += 1000;
 	}
 
-	//draw_square_around_playerpos(data);
+	// draw_square_around_playerpos(data);
 
-	draw_map(data); // j'aimerais éviter de le faire à chaque fois vu que c'est fixe
+	if (DEBUG)
+		draw_map(data); // j'aimerais éviter de le faire à chaque fois vu que c'est fixe
 
 	mlx_put_image_to_window(data->mlx_data->mlx, data->mlx_data->win, data->mlx_data->img, 0, 0);
 
@@ -173,7 +181,7 @@ void	draw_map(t_data *data)
 }
 
 // only int as inputs
-void forward_ray(t_2dpoint_float *ray, int angle)
+void forward_ray(t_2dpoint_float *ray, float angle)
 {
 	// printf("angle : %i\n", angle);
 	// printf("from : ");
@@ -194,20 +202,18 @@ void forward_ray(t_2dpoint_float *ray, int angle)
 }
 
 // Custom Ray casting
-int process_raycasting(t_data *data, int cast_angle)
+int process_raycasting(t_data *data, float cast_angle)
 {
+	// static int last_color;
+
 	t_2dpoint_float	ray;
-	t_2dpoint_float	on_window;
-	t_2dpoint_float	on_map;
-	t_2dpoint	int_point;
+	t_2dpoint_float	hit_point;
+	t_2dpoint_float	on_map_float;
+	t_2dpoint	on_map;
 
 	float x = (float)data->player_pos.x;
 	float y = (float)data->player_pos.y;
 	ray = make_float_point(x, y);
-	
-    float angle_rad = cast_angle * (M_PI / 180.0);
-    float delta_x = cos(angle_rad);
-    float delta_y = sin(angle_rad);
 
 	int render_distance = 1000;
 
@@ -222,44 +228,91 @@ int process_raycasting(t_data *data, int cast_angle)
 		if (DEBUG)
 		{
 			data->debug_color = 0xc91c1c; // red
-			draw_debug_square(data, ray);
+			draw_debug_square(data, ray, 2);
 		}
 
 		forward_ray(&ray, cast_angle);
 
-		on_window = ray; //point_float_to_int(ray);
-		on_map = ray; // point_float_to_int(ray);
-		convert_window_coords_to_map_coords_float(data, &on_map);
+		hit_point = ray; // point_float_to_int(ray);
+		on_map_float = ray; // point_float_to_int(ray);
+		convert_window_coords_to_map_coords_float(data, &on_map_float);
 
-		int_point = point_float_to_int(on_map);
+		on_map = point_float_to_int(on_map_float);
 
 		if (data->map_height >= on_map.y && data->map_width >= on_map.x)
 		{
-			if (data->map[int_point.y][int_point.x] == '1')
+			if (data->map[on_map.y][on_map.x] == '1')
 			{
 				// printf("hit\n");
 
                 //. COLLISION AXE
-                float hit_x = fmod(ray.x, 1.0); // Partie fractionnaire de X (position relative dans la case)
-                float hit_y = fmod(ray.y, 1.0); // Partie fractionnaire de Y
+				
+				// hit_point;
 
-                if (hit_x < hit_y)
-				{
-                    //, Mur vertical (Est/Ouest)
-                    data->wall_orientation = (delta_x > 0) ? WEST : EAST;
-					data->debug_color = 0x50ff2f; // green
-                }
-				else
-				{
-                    //, Mur horizontal (Nord/Sud)
-                    data->wall_orientation = (delta_y > 0) ? NORTH : SOUTH;
-					data->debug_color = 0x9900ff; // dark blue
-                }
+				convert_map_coords_to_window_coords(data, &on_map);
+
+				on_map.x += (float) SQUARE_SIZE / 2.0f;
+				on_map.y += (float) SQUARE_SIZE / 2.0f;
+
+				on_map_float = make_float_point((float)on_map.x, (float)on_map.y);
+
+				// printf("x\n");
+				// print_point(on_map);
+				// print_point(hit_point);
 
 				if (DEBUG)
-					draw_debug_square(data, ray);
+				{
+					data->debug_color = ORANGE;
+					draw_debug_square(data, on_map_float, 5);
+				}
+					
+				if (fabs(hit_point.x - on_map_float.x) > fabs(hit_point.y - on_map_float.y))  
+				{
+					//   < - - - >
+					// Si la différence en X est plus grande que celle en Y (impact sur un mur vertical)
 
-				return (get_distance(data->player_pos, point_float_to_int(on_window)));
+					// EAST et NORTH
+					if (hit_point.x > on_map_float.x)
+					{
+						// Wall EAST
+						data->debug_color = 0x00ccff; // blue
+						data->wall_orientation = EAST;
+					}
+					else
+					{
+						// Wall WEST
+						data->debug_color = 0xffff00; // yellow
+						data->wall_orientation = WEST;
+					}
+				}
+				else  
+				{
+					// WEST et SOUTH
+					if (hit_point.y < on_map_float.y)
+					{
+						// Wall SOUTH
+						data->debug_color = 0x9900ff; // purple
+						data->wall_orientation = SOUTH;
+					}
+					else
+					{
+						// Wall WEST
+						data->debug_color = 0xffffff; // white
+						data->wall_orientation = NORTH;
+					}
+				}
+
+				static int last_orientation = NORTH;
+
+				if (fabs(fabs(hit_point.x - on_map_float.x) - fabs(hit_point.y - on_map_float.y)) <= 2.0f)
+					data->wall_orientation = last_orientation;
+				last_orientation = data->wall_orientation;
+
+
+				if (DEBUG)
+					draw_debug_square(data, ray, 2);
+
+				return (get_distance(data->player_pos, point_float_to_int(hit_point)));
 			}
 		}
 
@@ -269,22 +322,6 @@ int process_raycasting(t_data *data, int cast_angle)
 
 	return 0;
 }
-
-/*
-	if (DEBUG)
-	{
-		if (angle_rad < M_PI)
-			data->debug_color = 0x50ff2f; // green
-		else if (angle_rad < 180)
-			data->debug_color = 0x502fff; // blue cyan
-		else if (angle_rad < 270)
-			data->debug_color = 0x9900ff; // dark blue
-		else
-			data->debug_color = 0xff50ff; // purple
-	}
-*/
-
-
 
 void	raycast(t_data *data)
 {
