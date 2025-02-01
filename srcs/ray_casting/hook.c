@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:18:53 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/01 03:53:07 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/01 06:35:16 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,14 +77,93 @@ void move_player(t_data *data, int keycode)
 // hooks
 int	key_hook(int keycode, t_data *data)
 {
-	// if (DEBUG)
+	if (data->key_hook_active == FALSE)
+		return 0;
+
+	// if (data->debug_mode)
 	// 	printf("%i pressed\n", keycode);
+
+	int diff_x;
+	int diff_y;
+	int sensi = 10;
+
 
 	if (keycode == ECHAP_KEY)
 		esc_destroy_all(data);
 
-	if (keycode == Z_KEY || keycode == Q_KEY || keycode == S_KEY || keycode == D_KEY)
+	else if (keycode == KEY_TAB)
+	{
+		if (data->debug_mode)
+		{
+			printf("\033[1;31mDebug mode : OFF\033[m\n");
+			data->debug_mode = FALSE;
+		}
+		else
+		{
+			printf("\033[1;31mDebug mode : ON\033[m\n");
+			data->debug_mode = TRUE;
+		}
+		update_window(data);
+	}
+
+	else if (keycode == Z_KEY || keycode == Q_KEY || keycode == S_KEY || keycode == D_KEY)
 		move_player(data, keycode);
+
+	else if (keycode == TOP_ARROW)
+	{
+		//, VERTICAL
+		diff_y = -sensi;
+		data->player_vertical_look += diff_y;
+		if (data->player_vertical_look >= 90)
+			data->player_vertical_look = 90;
+		else if (data->player_vertical_look < -90)
+			data->player_vertical_look = -90;
+		data->last_y += -sensi;
+
+		update_window(data);
+	}
+
+	else if (keycode == BOTTOM_ARROW)
+	{
+		//, VERTICAL
+		diff_y = sensi;
+		data->player_vertical_look += diff_y;
+		if (data->player_vertical_look >= 90)
+			data->player_vertical_look = 90;
+		else if (data->player_vertical_look < -90)
+			data->player_vertical_look = -90;
+		data->last_y += sensi;
+
+		update_window(data);
+	}
+
+	else if (keycode == LEFT_ARROW)
+	{
+		//, HORIZONTAL
+		diff_x = -sensi;
+		data->player_look_angle += diff_x;
+		if (data->player_look_angle >= 360)
+			data->player_look_angle -= 360;
+		else if (data->player_look_angle < 0)
+			data->player_look_angle += 360;
+		data->last_x += -sensi;
+
+		update_window(data);
+	}
+
+	else if (keycode == RIGHT_ARROW)
+	{
+		//, HORIZONTAL
+		diff_x = sensi;
+		data->player_look_angle += diff_x;
+		if (data->player_look_angle >= 360)
+			data->player_look_angle -= 360;
+		else if (data->player_look_angle < 0)
+			data->player_look_angle += 360;
+		data->last_x += sensi;
+
+		update_window(data);
+	}
 
 	return (0);
 }
@@ -93,29 +172,41 @@ int	key_hook(int keycode, t_data *data)
 // hooks mouse SIDE MOVEMENT ONLY
 int	mouse_move_hook(int x, int y, t_data *data)
 {
-	static int last_x = 0;
-	static int last_y = 0;
+	if (data->key_hook_active == FALSE)
+		return 0;
+	
+	// printf("a player_look_angle : %f\n", (float)data->player_look_angle);
+
+	// printf("x : %i\n", x);
+	// printf("y : %i\n", y);
+
+	// static int last_x = 0;
+	// static int last_y = 0;
 
 	static int refresh_count;
 	int refresh_cooldown = 1; //. 1 mais UTILE flip/flop
 
+	//, HORIZONTAL
 	int diff_x;
-	diff_x = (x - last_x);
+	diff_x = (x - data->last_x);
 	data->player_look_angle += diff_x;
 	if (data->player_look_angle >= 360)
 		data->player_look_angle -= 360;
 	else if (data->player_look_angle < 0)
 		data->player_look_angle += 360;
-	last_x = x;
+	data->last_x = x;
 
+	//, VERTICAL
 	int diff_y;
-	diff_y = (y - last_y);
+	diff_y = (y - data->last_y);
 	data->player_vertical_look += diff_y;
 	if (data->player_vertical_look >= 90)
 		data->player_vertical_look = 90;
 	else if (data->player_vertical_look < -90)
 		data->player_vertical_look = -90;
-	last_y = y;
+	data->last_y = y;
+
+	// printf("b player_look_angle : %f\n", (float)data->player_look_angle);
 
 	refresh_count++;
 	if (refresh_count > refresh_cooldown)

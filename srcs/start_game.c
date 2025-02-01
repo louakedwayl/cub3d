@@ -6,11 +6,29 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 16:18:46 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/01 03:49:03 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/01 06:29:18 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
+
+void	minimise_point(t_data *data, t_2dpoint *point)
+{
+	point->x /= data->mini_scale;
+	point->y /= data->mini_scale;
+
+	point->x += data->mini_offset;
+	point->y += data->mini_offset;
+}
+
+void	minimise_point_float(t_data *data, t_2dpoint_float *point)
+{
+	point->x /= (float) data->mini_scale;
+	point->y /= (float) data->mini_scale;
+
+	point->x += (float) data->mini_offset;
+	point->y += (float) data->mini_offset;
+}
 
 void	convert_map_coords_to_window_coords(t_data *data, t_2dpoint *point)
 {
@@ -73,15 +91,21 @@ void start_game(t_parsing_data *parsing_data)
 
 	convert_map_coords_to_window_coords(&data, &player_pos);
 
-	if (DEBUG)
-	{
-		printf("player spawned in : ");
-		print_point(player_pos);
-	}
+	data.debug_mode = FALSE;
 
 	data.player_pos = player_pos;
+
+
 	data.player_look_angle = 0;
 	data.player_vertical_look = 0; // milieu
+
+
+	data.key_hook_active = FALSE;
+
+	data.mode_mini = FALSE;
+
+	data.mini_scale = 5; // bigger = smaller
+	data.mini_offset = 30;
 
 	raycast(&data);
 

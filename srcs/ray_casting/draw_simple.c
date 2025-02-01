@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:18:41 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/01 02:26:02 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/01 06:30:01 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,9 @@ void	draw_square_around_point(t_data *data, t_2dpoint point)
 
 	int size = SQUARE_SIZE / 2;
 
+	if (data->mode_mini)
+		size /= data->mini_scale;
+
 	// Make corners
 	t_2dpoint	top_left = make_point(point.x - size, point.y - size);
 	t_2dpoint	top_right = make_point(point.x + size, point.y - size);
@@ -139,6 +142,14 @@ void	draw_debug_square(t_data *data, t_2dpoint_float point, int size)
 	t_2dpoint	top_right = make_point((int) point.x + size, (int) point.y - size);
 	t_2dpoint	bot_left = make_point((int) point.x - size, (int) point.y + size);
 	t_2dpoint	bot_right = make_point((int) point.x + size, (int) point.y + size);
+
+	if (data->mode_mini && !data->debug_mode)
+	{
+		minimise_point(data, &top_left);
+		minimise_point(data, &top_right);
+		minimise_point(data, &bot_left);
+		minimise_point(data, &bot_right);
+	}
 
 	draw_colored_square(data, top_left, top_right, bot_left, bot_right);
 }

@@ -29,8 +29,16 @@ typedef int	t_bool;
 # define S_KEY 115
 # define D_KEY 100
 
+# define TOP_ARROW 65362
+# define BOTTOM_ARROW 65364
+# define LEFT_ARROW 65361
+# define RIGHT_ARROW 65363
+
 # define ECHAP_KEY 65307
 # define TOP_RIGHT_CROSS 17
+
+# define KEY_NUMPAD0 65438
+# define KEY_TAB 65289
 
 # ifndef M_PI
 #  define M_PI 3.14159265358979323846
@@ -41,8 +49,6 @@ typedef int	t_bool;
 # endif
 
 # define SQUARE_SIZE 88
-
-# define DEBUG 0
 
 // colors
 # define RED 0xff0000
@@ -151,8 +157,14 @@ typedef struct s_data
 	int				player_look_angle;
 	int				player_vertical_look;
 	int				debug_color;
+	int				last_x;
+	int				last_y;
 	t_orientation	wall_orientation;
-
+	t_bool			mode_mini;
+	int				mini_scale;
+	int				mini_offset;
+	t_bool			key_hook_active;
+	t_bool			debug_mode;
 }	t_data;
 
 //. CORE - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -160,6 +172,8 @@ typedef struct s_data
 // main.c
 
 // start_game.c
+void			minimise_point(t_data *data, t_2dpoint *point);
+void			minimise_point_float(t_data *data, t_2dpoint_float *point);
 void			convert_map_coords_to_window_coords(t_data *data, t_2dpoint *point);
 void 			convert_window_coords_to_map_coords(t_data *data, t_2dpoint *point);
 void			convert_map_coords_to_window_coords_float(t_data *data, t_2dpoint_float *point);

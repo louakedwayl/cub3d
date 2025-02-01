@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:25:36 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/01 03:54:00 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/01 06:29:54 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,46 +114,52 @@ void	update_window(t_data *data)
 
 	data->mlx_data->img = mlx_new_image(data->mlx_data->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-	start_angle = (float) (data->player_look_angle - data->FOV/2);
-	end_angle = (float) (data->player_look_angle + data->FOV/2);
+	start_angle = (float) ((float)data->player_look_angle - (float)data->FOV / 2.0f);
+	end_angle = (float) ((float)data->player_look_angle + (float)data->FOV / 2.0f);
 
-	// printf("start_angle : %i\n", start_angle);
-	// printf("end_angle : %i\n", end_angle);
+	// printf("x player_look_angle : %f\n", (float)data->player_look_angle);
+	// printf("FOV : %f\n", (float)data->FOV);
 
-	int i;
-
-	i = 0;
+	// printf("start_angle : %f\n", start_angle);
+	// printf("end_angle : %f\n", end_angle);
+	// printf("\n");
 
 	// int range = (int) start_angle - (int) end_angle;
 
 	column = 0;
+	data->mode_mini = TRUE;
 	while (start_angle < end_angle)
 	{
 		distance = process_raycasting(data, start_angle);
 
 		// printf("distance : %i\n", distance);
 
-		if (!DEBUG)
+		if (!data->debug_mode)
 			if (distance > 10)
 				draw_pixel_column(data, column, distance); //, DRAW
 
-		i++;
 		column++;
 		
-		// printf("start_angle : %i\n", start_angle);
+		// printf("start_angle : %f\n", start_angle);
 
-		start_angle += 0.9f / (float) (WINDOW_WIDTH / data->FOV);
-
-		//start_angle += 1000;
+		start_angle += 1.0f / ((float)WINDOW_WIDTH / (float)data->FOV);
 	}
+	data->mode_mini = FALSE;
 
 	// draw_square_around_playerpos(data);
 
-	if (DEBUG)
+	if (data->debug_mode)
 		draw_map(data); // j'aimerais éviter de le faire à chaque fois vu que c'est fixe
 
-	mlx_put_image_to_window(data->mlx_data->mlx, data->mlx_data->win, data->mlx_data->img, 0, 0);
+	if (!data->debug_mode)
+	{
+		data->mode_mini = TRUE;
+		draw_map(data);
+		data->mode_mini = FALSE;
+	}
 
+	mlx_put_image_to_window(data->mlx_data->mlx, data->mlx_data->win, data->mlx_data->img, 0, 0);
+	
 	// sleep(0.1);
 
 	// usleep(1000);
@@ -178,6 +184,12 @@ void	draw_map(t_data *data)
 			{
 				square_center = make_float_point((float)index + 0.5f, (float)row + 0.5f);
 				convert_map_coords_to_window_coords_float(data, &square_center);
+
+				if (data->mode_mini)
+				{
+					minimise_point_float(data, &square_center);
+				}
+
 				point = point_float_to_int(square_center);
 				draw_square_around_point(data, point);
 			}
@@ -213,6 +225,20 @@ int process_raycasting(t_data *data, float cast_angle)
 {
 	static int last_orientation = NORTH;
 
+	static int print_limit_count = 0; // ça en print 1 sur 10
+
+	int debug_print_each = 30; // ça en print 1 sur 10
+	int debug_print_limit = 30; // ça en print 1 sur 10
+
+
+	print_limit_count++;
+	if (print_limit_count > debug_print_limit)
+	{
+		print_limit_count = 0;
+	}
+	else
+		print_limit_count++;
+
 	t_2dpoint_float	ray;
 	t_2dpoint_float	hit_point;
 	t_2dpoint_float	on_map_float;
@@ -232,10 +258,16 @@ int process_raycasting(t_data *data, float cast_angle)
 
 		// printf("player orientation : %i\n", data->player_look_angle);
 
-		if (DEBUG)
+		if (data->debug_mode && i % debug_print_each == 0 && print_limit_count == debug_print_limit)
 		{
 			data->debug_color = 0xc91c1c; // red
 			draw_debug_square(data, ray, 2);
+		}
+
+		if (data->mode_mini && i % debug_print_each == 0 && print_limit_count == debug_print_limit)
+		{
+			data->debug_color = 0xc91c1c; // red
+			draw_debug_square(data, ray, 1);
 		}
 
 		forward_ray(&ray, cast_angle);
@@ -267,7 +299,7 @@ int process_raycasting(t_data *data, float cast_angle)
 				// print_point(on_map);
 				// print_point(hit_point);
 
-				if (DEBUG)
+				if (data->debug_mode)
 				{
 					data->debug_color = ORANGE;
 					draw_debug_square(data, on_map_float, 5);
@@ -315,7 +347,7 @@ int process_raycasting(t_data *data, float cast_angle)
 				last_orientation = data->wall_orientation;
 
 
-				if (DEBUG)
+				if (data->debug_mode)
 					draw_debug_square(data, ray, 2);
 
 				return (get_distance(data->player_pos, point_float_to_int(hit_point)));
@@ -336,14 +368,16 @@ void	raycast(t_data *data)
 	if (!data->mlx_data)
 		free_all_and_exit(data, EXIT_FAILURE, "Failed to load mlx data");
 
+	// init last_x last_y
+	mlx_mouse_get_pos(data->mlx_data->mlx, data->mlx_data->win, &data->last_x, &data->last_y);
+
 	//, BUILD IMAGE
 
 	draw_map(data);
 	update_window(data);
 
-
-
 	//. LOAD
+	
     // mlx_mouse_move(data->mlx_data->mlx, data->mlx_data->win, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2); // Place la souris au centre
     // mlx_mouse_hide(data->mlx_data->mlx, data->mlx_data->win); // Cache le curseur
 
@@ -357,6 +391,8 @@ void	raycast(t_data *data)
 	mlx_hook(data->mlx_data->win, TOP_RIGHT_CROSS, 0, esc_destroy_all, data);
 
 	mlx_hook(data->mlx_data->win, 6, 1L << 6, mouse_move_hook, data);
+
+	data->key_hook_active = TRUE;
 
 	mlx_loop(data->mlx_data->mlx);
 
