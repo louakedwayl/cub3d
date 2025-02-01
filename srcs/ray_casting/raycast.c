@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:25:36 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/01 06:59:22 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/01 07:10:15 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,9 @@ void	update_window(t_data *data)
 	mlx_put_image_to_window(data->mlx_data->mlx, data->mlx_data->win, data->mlx_data->img, 0, 0);
 	
 	data->key_hook_active = TRUE;
-	// sleep(0.1);
+
+	
+	// sleep(0.01);
 
 	// usleep(1000);
 }
@@ -208,7 +210,7 @@ void forward_ray(t_2dpoint_float *ray, float angle)
 	// print_point(*ray);
 
     float angle_rad = ((float)angle) * (M_PI / 180.0);
-    float step = 1;  // Un pas plus fin pour la précision
+    float step = 0.5;  // Un pas plus fin pour la précision
 
     // Calculs avec des flottants
     float new_x = ray->x + cos(angle_rad) * step;
@@ -228,8 +230,8 @@ int process_raycasting(t_data *data, float cast_angle)
 
 	static int print_limit_count = 0; // ça en print 1 sur 10
 
-	int debug_print_each = 30; // ça en print 1 sur 10
-	int debug_print_limit = 30; // ça en print 1 sur 10
+	int debug_print_each = 60; // ça en print 1 tous les x step
+	int debug_print_limit = 50; // ça en print 1 sur x
 
 
 	print_limit_count++;
