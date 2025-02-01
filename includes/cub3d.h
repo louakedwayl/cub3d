@@ -220,6 +220,11 @@ typedef struct s_data
 	float				side_delta_x;
 	float				side_delta_y;
 
+	t_img				img_north;
+	t_img				img_west;
+	t_img				img_south;
+	t_img				img_east;
+
 }	t_data;
 
 //. CORE - - - - - - - - - - - - - - - - - - - - - - - - -
