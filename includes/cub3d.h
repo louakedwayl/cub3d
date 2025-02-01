@@ -40,7 +40,7 @@ typedef int	t_bool;
 #  define M_PI_2 1.5707963267948966
 # endif
 
-# define DEBUG 0
+# define DEBUG 1
 
 // utils
 typedef enum e_response
@@ -51,6 +51,15 @@ typedef enum e_response
 	NEED_TO_RETURN_TRUE,
 	NEED_TO_RETURN_FALSE
 }	t_response;
+
+typedef enum e_orientation
+{
+	NONE,
+	NORTH,
+	SOUTH,
+	EAST,
+	WEST
+}	t_orientation;
 
 typedef struct s_2dpoint
 {
@@ -109,13 +118,15 @@ typedef struct s_parsing_data
 
 typedef struct s_data
 {
-	t_mlx_data	*mlx_data;
-	char		**map;
-	t_2dpoint	player_pos;
-	int			map_width;
-	int			map_height;
-	int			FOV;
-	int			player_look_angle;
+	t_mlx_data		*mlx_data;
+	char			**map;
+	t_2dpoint		player_pos;
+	int				map_width;
+	int				map_height;
+	int				FOV;
+	int				player_look_angle;
+	int				debug_color;
+	t_orientation	wall_hit_orientation;
 
 }	t_data;
 
@@ -127,6 +138,7 @@ typedef struct s_data
 void			convert_map_coords_to_window_coords(t_data *data, t_2dpoint *point);
 void 			convert_window_coords_to_map_coords(t_data *data, t_2dpoint *point);
 void			convert_map_coords_to_window_coords_float(t_data *data, t_2dpoint_float *point);
+void			 convert_window_coords_to_map_coords_float(t_data *data, t_2dpoint_float *point);
 t_2dpoint		point_float_to_int(t_2dpoint_float point);
 void			start_game(t_parsing_data *data);
 
@@ -149,7 +161,7 @@ void			draw_line(t_data *data, t_2dpoint a, t_2dpoint b, int color);
 void			draw_white_square(t_data *data, t_2dpoint top_left, t_2dpoint top_right, t_2dpoint bot_left, t_2dpoint bot_right);
 void			draw_square_around_playerpos(t_data *data);
 void			draw_square_around_point(t_data *data, t_2dpoint point);
-void			draw_debug_red_square(t_data *data, t_2dpoint_float point);
+void			draw_debug_square(t_data *data, t_2dpoint_float point);
 
 // free.c
 void			free_all_and_exit(t_data *data, int exitcode, char *optional_msg);

@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:25:36 by ajosse            #+#    #+#             */
-/*   Updated: 2025/01/31 07:09:10 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/01 01:14:00 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,16 @@ int		get_distance(t_2dpoint a, t_2dpoint b)
 
     // Calcul de la distance euclidienne
     return (int)sqrt(dx * dx + dy * dy);  // Utilisation de sqrt pour la racine carrée
+}
+
+int		get_distance_float(t_2dpoint_float a, t_2dpoint_float b)
+{
+    // Calcul de la différence des coordonnées
+    float dx = b.x - a.x;
+    float dy = b.y - a.y;
+
+    // Calcul de la distance euclidienne
+    return (int)sqrt((double)dx * (double)dx + (double)dy * (double)dy);  // Utilisation de sqrt pour la racine carrée
 }
 
 // big distance = small column    because far
@@ -108,7 +118,7 @@ void	update_window(t_data *data)
 		{
 			while (i < 12)
 			{
-				draw_pixel_column(data, column, distance);
+				// draw_pixel_column(data, column, distance); //, DRAW
 				i++;
 				column++;
 			}
@@ -125,7 +135,7 @@ void	update_window(t_data *data)
 
 	//draw_square_around_playerpos(data);
 
-	//draw_map(data); // j'aimerais éviter de le faire à chaque fois vu que c'est fixe
+	draw_map(data); // j'aimerais éviter de le faire à chaque fois vu que c'est fixe
 
 	mlx_put_image_to_window(data->mlx_data->mlx, data->mlx_data->win, data->mlx_data->img, 0, 0);
 
@@ -136,7 +146,8 @@ void	update_window(t_data *data)
 
 void	draw_map(t_data *data)
 {
-	t_2dpoint	square_center;
+	t_2dpoint_float	square_center;
+	t_2dpoint	point;
 	int			index;
 	int			row;
 
@@ -150,9 +161,10 @@ void	draw_map(t_data *data)
 		{
 			if (data->map[row][index] == '1')
 			{
-				square_center = make_point(index, row);
-				convert_map_coords_to_window_coords(data, &square_center);
-				draw_square_around_point(data, square_center);
+				square_center = make_float_point((float)index + 0.5f, (float)row + 0.5f);
+				convert_map_coords_to_window_coords_float(data, &square_center);
+				point = point_float_to_int(square_center);
+				draw_square_around_point(data, point);
 			}
 			index++;
 		}
@@ -161,7 +173,7 @@ void	draw_map(t_data *data)
 }
 
 // only int as inputs
-void forward_ray(t_2dpoint_float *ray, int angle)
+void forward_ray(t_data *data, t_2dpoint_float *ray, int angle)
 {
 	// printf("angle : %i\n", angle);
 	// printf("from : ");
@@ -184,8 +196,10 @@ void forward_ray(t_2dpoint_float *ray, int angle)
 // Custom Ray casting
 int process_raycasting(t_data *data, int cast_angle)
 {
-	t_2dpoint	on_window;
-	t_2dpoint	on_map;
+	t_2dpoint_float	on_window;
+	t_2dpoint_float	on_map;
+
+	t_2dpoint	int_point;
 
 	t_2dpoint_float	ray;
 	int				angle;
@@ -197,29 +211,39 @@ int process_raycasting(t_data *data, int cast_angle)
 	
 	angle = cast_angle; //data->player_look_angle;
 
+	int render_distance = 1000;
+
 	int i = 0;
-	while (i < 1000)
+	while (i < render_distance)
     {
 		// printf("%i - ", i);
 		// usleep(100000);
 
 		// printf("player orientation : %i\n", data->player_look_angle);
-		
+
 		if (DEBUG)
-			draw_debug_red_square(data, ray);
+		{
+			data->debug_color = 0xc91c1c; // red
+			draw_debug_square(data, ray);
+		}
 
-		forward_ray(&ray, angle);
+		forward_ray(data, &ray, angle);
 
-		on_window = point_float_to_int(ray);
-		on_map = point_float_to_int(ray);
-		convert_window_coords_to_map_coords(data, &on_map);
+		on_window = ray; //point_float_to_int(ray);
+		on_map = ray; // point_float_to_int(ray);
+		convert_window_coords_to_map_coords_float(data, &on_map);
+
+		int_point = point_float_to_int(on_map);
 
 		if (data->map_height >= on_map.y && data->map_width >= on_map.x)
 		{
-			if (data->map[on_map.x][on_map.y] == '1')
+			if (data->map[int_point.y][int_point.x] == '1')
 			{
 				// printf("hit\n");
-				return (get_distance(data->player_pos, on_window));
+				if (DEBUG)
+					draw_debug_square(data, ray);
+
+				return (get_distance(data->player_pos, point_float_to_int(on_window)));
 			}
 		}
 
@@ -229,6 +253,22 @@ int process_raycasting(t_data *data, int cast_angle)
 
 	return 0;
 }
+
+/*
+	if (DEBUG)
+	{
+		if (angle_rad < M_PI)
+			data->debug_color = 0x50ff2f; // green
+		else if (angle_rad < 180)
+			data->debug_color = 0x502fff; // blue cyan
+		else if (angle_rad < 270)
+			data->debug_color = 0x9900ff; // dark blue
+		else
+			data->debug_color = 0xff50ff; // purple
+	}
+*/
+
+
 
 void	raycast(t_data *data)
 {
@@ -244,10 +284,12 @@ void	raycast(t_data *data)
 
 
 
-
 	//. LOAD
+    // mlx_mouse_move(data->mlx_data->mlx, data->mlx_data->win, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2); // Place la souris au centre
+    // mlx_mouse_hide(data->mlx_data->mlx, data->mlx_data->win); // Cache le curseur
+
 	mlx_put_image_to_window(data->mlx_data->mlx, data->mlx_data->win, data->mlx_data->img, 0, 0);
-	
+
 	// mlx_key_hook(data->mlx_data->win, key_hook, data);
 
 	mlx_hook(data->mlx_data->win, 2, 1L << 0, key_hook, data); // KeyPress (touche enfoncée)
