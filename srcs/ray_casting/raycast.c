@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:25:36 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/01 01:14:00 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/01 01:19:00 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,7 +173,7 @@ void	draw_map(t_data *data)
 }
 
 // only int as inputs
-void forward_ray(t_data *data, t_2dpoint_float *ray, int angle)
+void forward_ray(t_2dpoint_float *ray, int angle)
 {
 	// printf("angle : %i\n", angle);
 	// printf("from : ");
@@ -196,20 +196,18 @@ void forward_ray(t_data *data, t_2dpoint_float *ray, int angle)
 // Custom Ray casting
 int process_raycasting(t_data *data, int cast_angle)
 {
+	t_2dpoint_float	ray;
 	t_2dpoint_float	on_window;
 	t_2dpoint_float	on_map;
-
 	t_2dpoint	int_point;
-
-	t_2dpoint_float	ray;
-	int				angle;
 
 	float x = (float)data->player_pos.x;
 	float y = (float)data->player_pos.y;
-
 	ray = make_float_point(x, y);
 	
-	angle = cast_angle; //data->player_look_angle;
+    float angle_rad = cast_angle * (M_PI / 180.0);
+    float delta_x = cos(angle_rad);
+    float delta_y = sin(angle_rad);
 
 	int render_distance = 1000;
 
@@ -227,7 +225,7 @@ int process_raycasting(t_data *data, int cast_angle)
 			draw_debug_square(data, ray);
 		}
 
-		forward_ray(data, &ray, angle);
+		forward_ray(&ray, cast_angle);
 
 		on_window = ray; //point_float_to_int(ray);
 		on_map = ray; // point_float_to_int(ray);
@@ -240,6 +238,24 @@ int process_raycasting(t_data *data, int cast_angle)
 			if (data->map[int_point.y][int_point.x] == '1')
 			{
 				// printf("hit\n");
+
+                //. COLLISION AXE
+                float hit_x = fmod(ray.x, 1.0); // Partie fractionnaire de X (position relative dans la case)
+                float hit_y = fmod(ray.y, 1.0); // Partie fractionnaire de Y
+
+                if (hit_x < hit_y)
+				{
+                    //, Mur vertical (Est/Ouest)
+                    data->wall_orientation = (delta_x > 0) ? WEST : EAST;
+					data->debug_color = 0x50ff2f; // green
+                }
+				else
+				{
+                    //, Mur horizontal (Nord/Sud)
+                    data->wall_orientation = (delta_y > 0) ? NORTH : SOUTH;
+					data->debug_color = 0x9900ff; // dark blue
+                }
+
 				if (DEBUG)
 					draw_debug_square(data, ray);
 

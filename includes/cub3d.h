@@ -126,7 +126,7 @@ typedef struct s_data
 	int				FOV;
 	int				player_look_angle;
 	int				debug_color;
-	t_orientation	wall_hit_orientation;
+	t_orientation	wall_orientation;
 
 }	t_data;
 
