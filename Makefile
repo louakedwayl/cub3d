@@ -6,7 +6,7 @@
 #    By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/29 16:11:50 by ajosse            #+#    #+#              #
-#    Updated: 2025/01/30 14:52:46 by ajosse           ###   ########.fr        #
+#    Updated: 2025/02/01 17:20:23 by ajosse           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,11 @@ SRCFILES =	main.c \
 			ray_casting/init.c \
 			ray_casting/raycast.c \
 			ray_casting/utils.c \
+			ray_casting/conversion.c \
+			ray_casting/conversion2.c \
+			ray_casting/draw.c \
+			ray_casting/draw_column.c \
+			ray_casting/update.c \
 			
 
 SRCDIR = ./srcs/

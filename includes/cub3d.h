@@ -13,6 +13,10 @@
 # include <math.h>
 # include <X11/Xlib.h>
 
+# define AZERTY 0
+# define QWERTY 1
+# define KEYBOARD_TYPE QWERTY
+
 # define WINDOW_WIDTH 700
 # define WINDOW_HEIGHT 700
 
@@ -28,6 +32,9 @@ typedef int	t_bool;
 # define Q_KEY 113
 # define S_KEY 115
 # define D_KEY 100
+
+# define W_KEY 119
+# define A_KEY 97
 
 # define TOP_ARROW 65362
 # define BOTTOM_ARROW 65364
@@ -48,7 +55,7 @@ typedef int	t_bool;
 #  define M_PI_2 1.5707963267948966
 # endif
 
-# define SQUARE_SIZE 88
+// # define SQUARE_SIZE 88
 
 // colors
 # define RED 0xff0000
@@ -146,6 +153,26 @@ typedef struct s_parsing_data
 	t_img		img_east;
 }				t_parsing_data;
 
+typedef struct s_raycast_data
+{
+	int debug_print_each; // ça en print 1 tous les x step
+	int debug_print_limit; // ça en print 1 sur x
+
+	t_2dpoint_float	ray;
+	t_2dpoint_float	hit_point;
+	t_2dpoint_float	on_map_float;
+	t_2dpoint		on_map;
+
+	float x;
+	float y;
+
+	int render_distance;
+	int i;
+
+	int last_orientation;
+	int print_limit_count;
+}	t_raycast_data;
+
 typedef struct s_data
 {
 	t_mlx_data		*mlx_data;
@@ -159,12 +186,19 @@ typedef struct s_data
 	int				debug_color;
 	int				last_x;
 	int				last_y;
+
 	t_orientation	wall_orientation;
+	float			hit_part;
+
 	t_bool			mode_mini;
 	int				mini_scale;
 	int				mini_offset;
 	t_bool			key_hook_active;
 	t_bool			debug_mode;
+
+	float			square_size;
+
+	t_raycast_data	rc;
 }	t_data;
 
 //. CORE - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -200,7 +234,11 @@ void			draw_line(t_data *data, t_2dpoint a, t_2dpoint b, int color);
 void			draw_white_square(t_data *data, t_2dpoint top_left, t_2dpoint top_right, t_2dpoint bot_left, t_2dpoint bot_right);
 void			draw_square_around_playerpos(t_data *data);
 void			draw_square_around_point(t_data *data, t_2dpoint point);
+
 void			draw_debug_square(t_data *data, t_2dpoint_float point, int size);
+
+// draw_column.c
+void			draw_pixel_column(t_data *data, int column, int distance);
 
 // free.c
 void			free_all_and_exit(t_data *data, int exitcode, char *optional_msg);
@@ -222,5 +260,7 @@ void			raycast(t_data *data);
 // utils.c
 t_2dpoint		make_point(int x_value, int y_value);
 t_2dpoint_float	make_float_point(float x_value, float y_value);
+int				get_distance(t_2dpoint a, t_2dpoint b);
+int				get_distance_float(t_2dpoint_float a, t_2dpoint_float b);
 
 #endif

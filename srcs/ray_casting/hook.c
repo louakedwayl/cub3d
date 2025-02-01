@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:18:53 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/01 06:56:08 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/01 16:34:49 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,26 +65,50 @@ void move_player(t_data *data, int keycode)
 	t_2dpoint last_position;
 	last_position = data->player_pos;
 
-    if (keycode == Z_KEY)  // Forward
-    {
-        data->player_pos.x += delta_x;
-        data->player_pos.y += delta_y;
-    }
-    if (keycode == S_KEY)  // Backward
-    {
-        data->player_pos.x -= delta_x;
-        data->player_pos.y -= delta_y;
-    }
-    if (keycode == Q_KEY)  // Left
-    {
-        data->player_pos.x -= side_delta_x;
-        data->player_pos.y -= side_delta_y;
-    }
-    if (keycode == D_KEY)  // Right
-    {
-        data->player_pos.x += side_delta_x;
-        data->player_pos.y += side_delta_y;
-    }
+	//, AZERTY
+	if (keycode == Z_KEY && KEYBOARD_TYPE == AZERTY)  // Forward
+	{
+		data->player_pos.x += delta_x;
+		data->player_pos.y += delta_y;
+	}
+	else if (keycode == S_KEY && KEYBOARD_TYPE == AZERTY)  // Backward
+	{
+		data->player_pos.x -= delta_x;
+		data->player_pos.y -= delta_y;
+	}
+	else if (keycode == Q_KEY && KEYBOARD_TYPE == AZERTY)  // Left
+	{
+		data->player_pos.x -= side_delta_x;
+		data->player_pos.y -= side_delta_y;
+	}
+	else if (keycode == D_KEY && KEYBOARD_TYPE == AZERTY)  // Right
+	{
+		data->player_pos.x += side_delta_x;
+		data->player_pos.y += side_delta_y;
+	}
+
+	//, QWERTY
+	if (keycode == W_KEY && KEYBOARD_TYPE == QWERTY)  // Forward
+	{
+		data->player_pos.x += delta_x;
+		data->player_pos.y += delta_y;
+	}
+	else if (keycode == S_KEY && KEYBOARD_TYPE == QWERTY)  // Backward
+	{
+		data->player_pos.x -= delta_x;
+		data->player_pos.y -= delta_y;
+	}
+	else if (keycode == A_KEY && KEYBOARD_TYPE == QWERTY)  // Left
+	{
+		data->player_pos.x -= side_delta_x;
+		data->player_pos.y -= side_delta_y;
+	}
+	else if (keycode == D_KEY && KEYBOARD_TYPE == QWERTY)  // Right
+	{
+		data->player_pos.x += side_delta_x;
+		data->player_pos.y += side_delta_y;
+	}
+
 
     // Limiter la position pour qu'elle reste dans les bornes de la fenêtre
     data->player_pos.x = int_trunc(data->player_pos.x, 0, WINDOW_WIDTH);
@@ -109,7 +133,7 @@ int	key_hook(int keycode, t_data *data)
 		return 0;
 
 	// if (data->debug_mode)
-	// 	printf("%i pressed\n", keycode);
+	// printf("%i pressed\n", keycode);
 
 	int diff_x;
 	int diff_y;
@@ -134,7 +158,7 @@ int	key_hook(int keycode, t_data *data)
 		update_window(data);
 	}
 
-	else if (keycode == Z_KEY || keycode == Q_KEY || keycode == S_KEY || keycode == D_KEY)
+	else if (keycode == Z_KEY || keycode == Q_KEY || keycode == S_KEY || keycode == D_KEY || keycode == W_KEY || keycode == A_KEY)
 		move_player(data, keycode);
 
 	else if (keycode == TOP_ARROW)

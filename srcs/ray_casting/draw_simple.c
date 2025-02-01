@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:18:41 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/01 06:30:01 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/01 17:23:47 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	draw_line(t_data *data, t_2dpoint a, t_2dpoint b, int color)
 		if (e2 > -dy) { err -= dy; a.x += sx; }
 		if (e2 < dx) { err += dx; a.y += sy; }
 	}
-	put_pixel_on_image(data->mlx_data->img, b.x, b.y, color); // Assure que le dernier pixel est dessiné
+	put_pixel_on_image(data->mlx_data->img, b.x, b.y, color);
 }
 
 // for simple player representation
@@ -57,99 +57,36 @@ void	draw_white_square(t_data *data, t_2dpoint top_left, t_2dpoint top_right, t_
 	draw_line(data, top_right, bot_right, color);
 }
 
-
-
-
-
-
-// function to rotate a point around center, by angle
-t_2dpoint rotate_point(t_2dpoint point, t_2dpoint center, double angle)
+void	draw_map(t_data *data)
 {
-	double radians = angle * (M_PI / 180.0);
-	double cos_angle = cos(radians);
-	double sin_angle = sin(radians);
+	t_2dpoint_float	square_center;
+	t_2dpoint	point;
+	int			index;
+	int			row;
 
-	t_2dpoint rotated_point;
-	rotated_point.x = cos_angle * (point.x - center.x) - sin_angle * (point.y - center.y) + center.x;
-	rotated_point.y = sin_angle * (point.x - center.x) + cos_angle * (point.y - center.y) + center.y;
+	index = 0;
+	row = 0;
 
-	return rotated_point;
-}
-
-void	draw_square_around_playerpos(t_data *data)
-{
-	// printf("player orientation : %i\n", data->player_look_angle);
-
-	int size = 15;
-
-	// Make corners
-	t_2dpoint	top_left = make_point(data->player_pos.x - size, data->player_pos.y - size);
-	t_2dpoint	top_right = make_point(data->player_pos.x + size, data->player_pos.y - size);
-	t_2dpoint	bot_left = make_point(data->player_pos.x - size, data->player_pos.y + size);
-	t_2dpoint	bot_right = make_point(data->player_pos.x + size, data->player_pos.y + size);
-
-    // Apply rotation
-    top_left = rotate_point(top_left, data->player_pos, data->player_look_angle);
-    top_right = rotate_point(top_right, data->player_pos, data->player_look_angle);
-    bot_left = rotate_point(bot_left, data->player_pos, data->player_look_angle);
-    bot_right = rotate_point(bot_right, data->player_pos, data->player_look_angle);
-
-	draw_white_square(data, top_left, top_right, bot_left, bot_right);
-}
-
-
-void	draw_square_around_point(t_data *data, t_2dpoint point)
-{
-	// printf("player orientation : %i\n", data->player_look_angle);
-
-	int size = SQUARE_SIZE / 2;
-
-	if (data->mode_mini)
-		size /= data->mini_scale;
-
-	// Make corners
-	t_2dpoint	top_left = make_point(point.x - size, point.y - size);
-	t_2dpoint	top_right = make_point(point.x + size, point.y - size);
-	t_2dpoint	bot_left = make_point(point.x - size, point.y + size);
-	t_2dpoint	bot_right = make_point(point.x + size, point.y + size);
-
-	draw_white_square(data, top_left, top_right, bot_left, bot_right);
-}
-
-
-
-
-
-
-
-
-
-
-void	draw_colored_square(t_data *data, t_2dpoint top_left, t_2dpoint top_right, t_2dpoint bot_left, t_2dpoint bot_right)
-{
-	draw_line(data, top_left, top_right, data->debug_color);
-	draw_line(data, bot_left, bot_right, data->debug_color);
-	draw_line(data, top_left, bot_left, data->debug_color);
-	draw_line(data, top_right, bot_right, data->debug_color);
-}
-
-void	draw_debug_square(t_data *data, t_2dpoint_float point, int size)
-{
-	// printf("player orientation : %i\n", data->player_look_angle);
-
-	// Make corners
-	t_2dpoint	top_left = make_point((int) point.x - size, (int) point.y - size);
-	t_2dpoint	top_right = make_point((int) point.x + size, (int) point.y - size);
-	t_2dpoint	bot_left = make_point((int) point.x - size, (int) point.y + size);
-	t_2dpoint	bot_right = make_point((int) point.x + size, (int) point.y + size);
-
-	if (data->mode_mini && !data->debug_mode)
+	while (row < data->map_height)
 	{
-		minimise_point(data, &top_left);
-		minimise_point(data, &top_right);
-		minimise_point(data, &bot_left);
-		minimise_point(data, &bot_right);
-	}
+		index = 0;
+		while (index < data->map_width)
+		{
+			if (data->map[row][index] == '1')
+			{
+				square_center = make_float_point((float)index + 0.5f, (float)row + 0.5f);
+				convert_map_coords_to_window_coords_float(data, &square_center);
 
-	draw_colored_square(data, top_left, top_right, bot_left, bot_right);
+				if (data->mode_mini)
+				{
+					minimise_point_float(data, &square_center);
+				}
+
+				point = point_float_to_int(square_center);
+				draw_square_around_point(data, point);
+			}
+			index++;
+		}
+		row++;
+	}
 }
