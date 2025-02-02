@@ -253,6 +253,7 @@ int				open_map(t_parsing_data *data, char *map);
 // debug.c
 void			print_point(t_2dpoint point);
 void			print_point_float(t_2dpoint_float point);
+void			print_map(char **map);
 
 // draw_simple.c
 void			put_pixel_on_image(void *img, int x, int y, int color);
@@ -267,6 +268,7 @@ void			draw_debug_square(t_data *data, t_2dpoint_float point, int size);
 void			draw_pixel_column(t_data *data, int column, int distance);
 
 // free.c
+void			clear_map(char **map);
 void			free_all_and_exit(t_data *data, int exitcode, char *optional_msg);
 
 // hook.c

@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:18:41 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/01 17:23:47 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/02 17:53:14 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,9 @@ void	draw_map(t_data *data)
 				}
 
 				point = point_float_to_int(square_center);
-				draw_square_around_point(data, point);
+				if ((index != 0 && row != 0)
+					&& (index != data->map_width - 1 && row != data->map_height - 1))
+					draw_square_around_point(data, point);
 			}
 			index++;
 		}

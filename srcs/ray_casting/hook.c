@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:18:53 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/01 18:41:23 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/02 18:10:47 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ t_bool	player_is_in_wall(t_data *data)
 
 	if (data->map_height >= on_map.y && data->map_width >= on_map.x)
 	{
-		if (data->map[on_map.y][on_map.x] == '1')
+		if (data->map[on_map.y][on_map.x] == '1' || data->map[on_map.y][on_map.x] == ' ')
 		{
 			return (TRUE);
 		}

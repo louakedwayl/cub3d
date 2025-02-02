@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:20:03 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/01 17:54:02 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/02 17:14:55 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,4 +20,17 @@ void	print_point(t_2dpoint point)
 void	print_point_float(t_2dpoint_float point)
 {
 	printf("(%f, %f)\n", point.x, point.y);
+}
+
+void	print_map(char **map)
+{
+	int	i;
+
+	i = 0;
+	while (map[i])
+	{
+		printf("%s\n", map[i]);
+		i++;
+	}
+	return ;
 }

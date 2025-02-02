@@ -6,18 +6,18 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:18:38 by ajosse            #+#    #+#             */
-/*   Updated: 2025/01/30 23:03:16 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/02 17:48:39 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
 // free map[i] && free map
-static void	clear_map(char **map)
+void	clear_map(char **map)
 {
-	//int	i;
+	// int	i;
 
-	//i = 0;
+	// i = 0;
 	// while (map[i])
 	// {
 	// 	free(map[i]);

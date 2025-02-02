@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 17:17:49 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/01 19:10:16 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/02 18:20:22 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	draw_pixel_column(t_data *data, int column, int distance)
 {
 
 	data->draw_data.screen_height = WINDOW_HEIGHT;
-	data->draw_data.view_distance = 50.0f;
+	data->draw_data.view_distance = data->square_size; // 50.0f;
 	data->draw_data.column_height = (data->draw_data.screen_height * data->draw_data.view_distance) / (float)distance;
 	data->draw_data.top = (data->draw_data.screen_height - (int)data->draw_data.column_height) / 2;
 	data->draw_data.bottom = data->draw_data.top + (int)data->draw_data.column_height;
