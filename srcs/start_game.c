@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 16:18:46 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/02 18:30:21 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/02 19:26:41 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ t_2dpoint	get_player_spawn_point(t_data *data, char **map)
 	x = 0;
 	y = 0;
 	if (!map || !map[0])
-		free_all_and_exit(data, EXIT_SUCCESS, NULL);
+		free_all_and_exit(data, EXIT_FAILURE, NULL);
 	while (map[y])
 	{
 		x = 0;
@@ -168,7 +168,7 @@ t_2dpoint	get_player_spawn_point(t_data *data, char **map)
 		}
 		y++;
 	}
-	free_all_and_exit(data, EXIT_SUCCESS, "no spawnpoint was found");
+	free_all_and_exit(data, EXIT_FAILURE, "no spawnpoint was found");
 	return (make_point(5, 5));
 }
 
@@ -181,30 +181,46 @@ void start_game(t_parsing_data *parsing_data)
 	data.FOV = 65;
 
 	//, map que je recois
-	data.map = (char **)malloc(sizeof(char *) * 8);
+	// data.map = (char **)malloc(sizeof(char *) * 8);
 	//! Attention faire une fonction qui put des angles pour pa segfault
 
-	int choose = 1;
+	int choose = 1; /// choose
+
+	if (choose == -1)
+	{
+		data.map = (char **)malloc(sizeof(char *) * 4);
+
+		data.map[0] = "1111";
+		data.map[1] = "1011";
+		data.map[2] = "1N01";
+		data.map[3] = "1111";
+
+		data.map[4] = NULL;
+	}
 
 	if (choose == 0)
 	{
-		data.map[0] = "11111111111111111111";
-		data.map[1] = "100000000000000000001";
-		data.map[2] = "1010000100000000000001";
-		data.map[3] = "10000E0000000000000001";
-		data.map[4] = "1000000010000000000001";
-		data.map[5] = "1110000000000000111111";
-		data.map[6] = "1111111111111111111111";
+		data.map = (char **)malloc(sizeof(char *) * 8);
+
+		data.map[0] = "111111111111111111";
+		data.map[1] = "1000000000000000001";
+		data.map[2] = "1010000100000000001";
+		data.map[3] = "10000E0000000000001";
+		data.map[4] = "1000000010000000001";
+		data.map[5] = "1110000000000000111";
+		data.map[6] = "1111111111111111111";
 		data.map[7] = NULL;
 	}
 
 	if (choose == 1)
 	{
-		data.map[0] = "1111111111";
+		data.map = (char **)malloc(sizeof(char *) * 8);
+
+		data.map[0] = "111111111";
 		data.map[1] = "1000000001";
 		data.map[2] = "1010000001";
 		data.map[3] = "10000E0001";
-		data.map[4] = "1000000001";
+		data.map[4] = "1000000001000";
 		data.map[5] = "1110000111";
 		data.map[6] = "1111111111";
 		data.map[7] = NULL;
@@ -212,6 +228,8 @@ void start_game(t_parsing_data *parsing_data)
 
 	if (choose == 2)
 	{
+		data.map = (char **)malloc(sizeof(char *) * 8);
+
 		data.map[0] = "1111111111111111111111111111111111111111111111";
 		data.map[1] = "1000000000000000000000000000000000000000000001";
 		data.map[2] = "10100001000000000000000000000000000000000000001";
@@ -222,6 +240,26 @@ void start_game(t_parsing_data *parsing_data)
 		data.map[7] = NULL;
 	}
 
+	if (choose == 3)
+	{
+		data.map = (char **)malloc(sizeof(char *) * 15);
+
+		data.map[0] =  "1111111111111111111111111";
+		data.map[1] =  "1000000000110000000000001";
+		data.map[2] =  "1011000001110000000000001";
+		data.map[3] =  "1001000000000000000000001";
+		data.map[4] =  "111111111011000001110000000000001";
+		data.map[5] =  "100000000011000001110111111111111";
+		data.map[6] =  "11110111111111011100000010001";
+		data.map[7] =  "11110111111111011101010010001";
+		data.map[8] =  "11000000110101011100000010001";
+		data.map[9] =  "10000000000000001100000010001";
+		data.map[10] = "10000N00000000001101010010001";
+		data.map[11] = "1100000111010101111101111000111";
+		data.map[12] = "11110111 1110101 101111010001";
+		data.map[13] = "11111111 1111111 111111111111";
+		data.map[14] = NULL;
+	}
 
 	// data.map[7] = "00000000"; // to transform to square
 
@@ -235,7 +273,7 @@ void start_game(t_parsing_data *parsing_data)
 		free_all_and_exit(&data, EXIT_SUCCESS, NULL);
 	}
 
-	print_map(data.map);
+	// print_map(data.map);
 
 	// DERNIERE RANGEE POUR TRANSFORMER EN SQUARE
 
@@ -267,7 +305,14 @@ void start_game(t_parsing_data *parsing_data)
 
 	// data.square_size = (float) data.map_height * 11.0f;
 
-	data.square_size = (float) WINDOW_HEIGHT / (float) (data.map_height - (float)(data.map_height/10 - 1));
+	// data.square_size = (float) WINDOW_HEIGHT
+	// 					/ (float) (data.map_height
+	// 					- (float)(data.map_height/10)
+	// 					- (1.0f / (float)(data.map_height)));
+
+	data.square_size = (float) ((float)WINDOW_HEIGHT / (float)data.map_height);
+						//+ (0.3f / (float)(data.map_height));
+
 
 	data.player_pos.x += (int)(data.square_size / 2.0f);
 	data.player_pos.y += (int)(data.square_size / 2.0f);

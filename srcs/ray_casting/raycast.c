@@ -6,31 +6,102 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:25:36 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/01 17:51:39 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/02 21:04:30 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
-// only int as inputs
-void forward_ray(t_2dpoint_float *ray, float angle)
+// // only int as inputs
+// void forward_ray(t_2dpoint_float *ray, float angle)
+// {
+// 	// printf("angle : %i\n", angle);
+// 	// printf("from : ");
+// 	// print_point(*ray);
+
+//     float angle_rad = ((float)angle) * (M_PI / 180.0);
+//     float step = 0.5;  // Un pas plus fin pour la précision
+
+//     // Calculs avec des flottants
+//     float new_x = ray->x + cos(angle_rad) * step;
+//     float new_y = ray->y + sin(angle_rad) * step;
+
+//     ray->x = new_x;
+//     ray->y = new_y;
+
+// 	// printf("to : ");
+// 	// print_point(*ray);
+// }
+
+void forward_ray(t_data *data, t_2dpoint_float *ray, float angle)
 {
-	// printf("angle : %i\n", angle);
-	// printf("from : ");
-	// print_point(*ray);
+	float angle_rad = angle * (M_PI / 180.0);
+	float dx = cos(angle_rad);
+	float dy = sin(angle_rad);
 
-    float angle_rad = ((float)angle) * (M_PI / 180.0);
-    float step = 0.5;  // Un pas plus fin pour la précision
+	float distance;
 
-    // Calculs avec des flottants
-    float new_x = ray->x + cos(angle_rad) * step;
-    float new_y = ray->y + sin(angle_rad) * step;
+	// printf("avant\n");
 
-    ray->x = new_x;
-    ray->y = new_y;
+	t_2dpoint_float on_map = make_float_point(ray->x, ray->y);
+	convert_window_coords_to_map_coords_float(data, &on_map);
 
-	// printf("to : ");
-	// print_point(*ray);
+	t_2dpoint temp;
+	temp = point_float_to_int(on_map);
+	convert_map_coords_to_window_coords(data, &temp);
+	// printf("temp : ");
+	// print_point(temp);
+	on_map = make_float_point((float)temp.x, (float)temp.y);
+	// printf("on map : ");
+	// print_point_float(on_map);
+
+	convert_map_coords_to_window_coords_float(data, &on_map); //!
+
+	// printf("check\n");
+
+	if (fabs(dx) > fabs(dy))
+	{
+		// vers droite ou gauche
+		if (dx > 0)
+		{
+			//! vers droite
+			on_map.x += data->square_size / 2.0f;
+		}
+		else
+		{
+			//* vers gauche
+			on_map.x -= data->square_size / 2.0f;
+		}
+		on_map.y = ray->y;
+
+		data->debug_color = 0x00ff00; //* green
+		draw_debug_square(data, on_map, 2);
+
+		distance = (on_map.x - ray->x) / dx;
+		ray->x += dx * distance;
+		ray->y += dy * distance;
+	}
+	else
+	{
+		// vers haut ou bas
+		if (dy < 0)
+		{
+			//* vers haut
+			on_map.y -= data->square_size / 2.0f;
+		}
+		else
+		{
+			//! vers bas
+			on_map.y += data->square_size / 2.0f;
+		}
+		on_map.x = ray->x;
+
+		distance = (on_map.y - ray->y) / dy;
+		ray->x += dx * distance;
+		ray->y += dy * distance;
+	}
+
+	// printf("end\n");
 }
 
 void	init_raycast_vars(t_data *data)
@@ -50,7 +121,7 @@ void	init_raycast_vars(t_data *data)
 
 void	update_ray(t_data *data, float cast_angle)
 {
-	if (data->debug_mode && data->rc.i % data->rc.debug_print_each == 0 && data->rc.print_limit_count == data->rc.debug_print_limit)
+	if (data->debug_mode) // && data->rc.i % data->rc.debug_print_each == 0 && data->rc.print_limit_count == data->rc.debug_print_limit)
 	{
 		data->debug_color = 0xc91c1c; // red
 		draw_debug_square(data, data->rc.ray, 2);
@@ -60,7 +131,7 @@ void	update_ray(t_data *data, float cast_angle)
 		data->debug_color = 0xc91c1c; // red
 		draw_debug_square(data, data->rc.ray, 1);
 	}
-	forward_ray(&data->rc.ray, cast_angle);
+	forward_ray(data, &data->rc.ray, cast_angle);
 	data->rc.hit_point = data->rc.ray; // point_float_to_int(ray);
 	data->rc.on_map_float = data->rc.ray; // point_float_to_int(ray);
 	convert_window_coords_to_map_coords_float(data, &data->rc.on_map_float);
@@ -133,9 +204,13 @@ void	get_collision_infos(t_data *data)
 	// if (data->debug_mode)
 	// 	printf("hit part : %f\n", data->hit_part);
 
-	// avoid corner bug
-	if (fabs(fabs(data->rc.hit_point.x - data->rc.on_map_float.x) - fabs(data->rc.hit_point.y - data->rc.on_map_float.y)) <= 2.0f)
+	//! avoid corner bug
+	if ((fabs(fabs(data->rc.hit_point.x - data->rc.on_map_float.x)
+		- fabs(data->rc.hit_point.y - data->rc.on_map_float.y))
+		<= 3.0f))
+	{
 		data->wall_orientation = data->rc.last_orientation;
+	}
 	data->rc.last_orientation = data->wall_orientation;
 
 
@@ -162,7 +237,6 @@ int process_raycasting(t_data *data, float cast_angle)
 			if (data->map[data->rc.on_map.y][data->rc.on_map.x] == '1')
 			{
 				get_collision_infos(data);
-
 				return (get_distance(data->player_pos, point_float_to_int(data->rc.hit_point)));
 			}
 		}
