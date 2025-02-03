@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 16:18:46 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/02 19:26:41 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/03 05:59:23 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,13 +184,13 @@ void start_game(t_parsing_data *parsing_data)
 	// data.map = (char **)malloc(sizeof(char *) * 8);
 	//! Attention faire une fonction qui put des angles pour pa segfault
 
-	int choose = 1; /// choose
+	int choose = 3; /// choose
 
 	if (choose == -1)
 	{
 		data.map = (char **)malloc(sizeof(char *) * 4);
 
-		data.map[0] = "1111";
+		data.map[0] = "0111";
 		data.map[1] = "1011";
 		data.map[2] = "1N01";
 		data.map[3] = "1111";
@@ -311,17 +311,19 @@ void start_game(t_parsing_data *parsing_data)
 	// 					- (1.0f / (float)(data.map_height)));
 
 	data.square_size = (float) ((float)WINDOW_HEIGHT / (float)data.map_height);
-						//+ (0.3f / (float)(data.map_height));
 
 
 	data.player_pos.x += (int)(data.square_size / 2.0f);
 	data.player_pos.y += (int)(data.square_size / 2.0f);
 
 	data.rc.last_orientation = NORTH;
+
 	data.rc.print_limit_count = 0;
-	data.rc.debug_print_each = 60;
-	data.rc.debug_print_limit = 50;
-	data.rc.render_distance = 100000;
+	// data.rc.debug_print_each = 1;
+	data.rc.debug_print_limit = 2;
+	
+
+	data.rc.render_distance = 1000; // c est la limite au cas ou
 
 	raycast(&data);
 

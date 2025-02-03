@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 17:19:46 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/02 19:30:37 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/03 05:57:23 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,40 @@
 
 void	trace_and_display(t_data *data, float start_angle, float end_angle)
 {
-	int	column;
-	int	distance;
+
+
+	t_2dpoint_float ray = make_float_point((float) data->player_pos.x, (float) data->player_pos.y);
+	
+	// // // data->debug_color = 0x00f5FF; // blue cyan
+	// // // draw_debug_square(data, ray, 3);
+
+	// forward_ray(data, &ray, 8.357218f);
+	// forward_ray(data, &ray, 8.357218f);
+	// forward_ray(data, &ray, 8.357218f);
+	// forward_ray(data, &ray, 8.357218f);
+	// forward_ray(data, &ray, 8.357218f);
+	// forward_ray(data, &ray, 8.357218f);
+	// forward_ray(data, &ray, 8.357218f);
+	// forward_ray(data, &ray, 8.357218f);
+	// forward_ray(data, &ray, 8.357218f);
+	// forward_ray(data, &ray, 8.357218f);
+
+
+	// (void) data;
+	// (void) start_angle;
+	// (void) end_angle;
+
+	//. VRAI CODE ↓
+
+	int		column;
+	float	distance;
 
 	column = 0;
 	data->mode_mini = TRUE;
 	while (start_angle < end_angle)
 	{
+		// forward_ray(data, &ray, start_angle);
+
 		distance = process_raycasting(data, start_angle);
 
 		// printf("distance : %i\n", distance);
@@ -34,8 +61,14 @@ void	trace_and_display(t_data *data, float start_angle, float end_angle)
 		// printf("start_angle : %f\n", start_angle);
 
 		start_angle += 1.0f / ((float)WINDOW_WIDTH / (float)data->FOV);
+
+		// break ;
 	}
-	data->mode_mini = FALSE;
+	// printf("fini\n"); //!
+	// sleep(0.1); //!
+	(void) distance; //!
+	data->mode_mini = FALSE; //*
+	(void) ray; //!
 }
 
 void	update_window(t_data *data)
@@ -78,7 +111,6 @@ void	update_window(t_data *data)
 	
 	data->key_hook_active = TRUE;
 
-	
 	// sleep(0.01);
 
 	// usleep(1000);

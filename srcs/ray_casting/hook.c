@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:18:53 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/02 18:10:47 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/03 04:09:21 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,15 @@
 
 // trunc(999, 10, 100) = 100
 int	int_trunc(int value, int min, int max)
+{
+	if (value < min)
+		return min;
+	if (value > max)
+		return max;
+	return value;
+}
+
+float	float_trunc(float value, float min, float max)
 {
 	if (value < min)
 		return min;

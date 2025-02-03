@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:52:35 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/01 17:19:30 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/03 04:20:18 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,22 +32,22 @@ t_2dpoint_float	make_float_point(float x_value, float y_value)
 	return (new);
 }
 
-int		get_distance(t_2dpoint a, t_2dpoint b)
+float	get_distance(t_2dpoint a, t_2dpoint b)
 {
     // Calcul de la différence des coordonnées
     int dx = b.x - a.x;
     int dy = b.y - a.y;
 
     // Calcul de la distance euclidienne
-    return (int)sqrt(dx * dx + dy * dy);  // Utilisation de sqrt pour la racine carrée
+    return (float)sqrt(dx * dx + dy * dy);  // Utilisation de sqrt pour la racine carrée
 }
 
-int		get_distance_float(t_2dpoint_float a, t_2dpoint_float b)
+float	get_distance_float(t_2dpoint_float a, t_2dpoint_float b)
 {
     // Calcul de la différence des coordonnées
     float dx = b.x - a.x;
     float dy = b.y - a.y;
 
     // Calcul de la distance euclidienne
-    return (int)sqrt((double)dx * (double)dx + (double)dy * (double)dy);  // Utilisation de sqrt pour la racine carrée
+    return sqrtf(dx * dx + dy * dy);  // Utilisation de sqrt pour la racine carrée
 }

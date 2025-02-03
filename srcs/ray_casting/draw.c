@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 17:13:38 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/01 17:17:02 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/02 23:40:27 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,19 @@ void	draw_debug_square(t_data *data, t_2dpoint_float point, int size)
 {
 	// printf("player orientation : %i\n", data->player_look_angle);
 
+	// printf("ray : ");
+	// print_point_float(point);
+
 	// Make corners
 	t_2dpoint	top_left = make_point((int) point.x - size, (int) point.y - size);
 	t_2dpoint	top_right = make_point((int) point.x + size, (int) point.y - size);
 	t_2dpoint	bot_left = make_point((int) point.x - size, (int) point.y + size);
 	t_2dpoint	bot_right = make_point((int) point.x + size, (int) point.y + size);
+
+	// print_point(top_left);
+	// print_point(top_right);
+	// print_point(bot_left);
+	// print_point(bot_right);
 
 	if (data->mode_mini && !data->debug_mode)
 	{

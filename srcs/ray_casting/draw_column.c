@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 17:17:49 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/02 18:46:32 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/03 04:01:12 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ int	choose_color(t_data *data)
 }
 
 // big distance = small column    because far
-void	draw_pixel_column(t_data *data, int column, int distance)
+void	draw_pixel_column(t_data *data, int column, float distance)
 {
 
 	data->draw_data.screen_height = WINDOW_HEIGHT;
 	data->draw_data.view_distance = data->square_size; // 50.0f;
-	data->draw_data.column_height = (data->draw_data.screen_height * data->draw_data.view_distance) / (float)distance;
+	data->draw_data.column_height = ((float) data->draw_data.screen_height * data->draw_data.view_distance) / distance;
 	data->draw_data.top = (data->draw_data.screen_height - (int)data->draw_data.column_height) / 2;
 	data->draw_data.bottom = data->draw_data.top + (int)data->draw_data.column_height;
 

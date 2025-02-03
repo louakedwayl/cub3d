@@ -15,7 +15,7 @@
 
 # define AZERTY 0
 # define QWERTY 1
-# define KEYBOARD_TYPE QWERTY
+# define KEYBOARD_TYPE AZERTY
 
 # define WINDOW_WIDTH 700
 # define WINDOW_HEIGHT 700
@@ -169,7 +169,6 @@ typedef struct s_column_draw_data
 
 typedef struct s_raycast_data
 {
-	int debug_print_each;
 	int debug_print_limit;
 
 	t_2dpoint_float	ray;
@@ -265,7 +264,7 @@ void			draw_square_around_point(t_data *data, t_2dpoint point);
 void			draw_debug_square(t_data *data, t_2dpoint_float point, int size);
 
 // draw_column.c
-void			draw_pixel_column(t_data *data, int column, int distance);
+void			draw_pixel_column(t_data *data, int column, float distance);
 
 // free.c
 void			clear_map(char **map);
@@ -280,15 +279,18 @@ int				mouse_move_hook(int x, int y, t_data *data);
 t_mlx_data		*init_mlx_data(t_data *data);
 
 // raycast.c
+void			forward_ray(t_data *data, t_2dpoint_float *ray, float angle);
 void			update_window(t_data *data);
 void			draw_map(t_data *data);
-int				process_raycasting(t_data *data, float cast_angle);
+float			process_raycasting(t_data *data, float cast_angle);
 void			raycast(t_data *data);
 
 // utils.c
 t_2dpoint		make_point(int x_value, int y_value);
 t_2dpoint_float	make_float_point(float x_value, float y_value);
-int				get_distance(t_2dpoint a, t_2dpoint b);
-int				get_distance_float(t_2dpoint_float a, t_2dpoint_float b);
+float			get_distance(t_2dpoint a, t_2dpoint b);
+float			get_distance_float(t_2dpoint_float a, t_2dpoint_float b);
+
+float			float_trunc(float value, float min, float max);
 
 #endif
