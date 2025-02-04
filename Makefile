@@ -6,7 +6,7 @@
 #    By: wlouaked <wlouaked@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/29 16:11:50 by ajosse            #+#    #+#              #
-#    Updated: 2025/02/04 16:37:00 by wlouaked         ###   ########.fr        #
+#    Updated: 2025/02/04 17:33:20 by wlouaked         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,8 +39,14 @@ SRCFILES =	main.c \
 			ray_casting/conversion2.c \
 			ray_casting/draw.c \
 			ray_casting/draw_column.c \
+			ray_casting/map_init.c \
+			ray_casting/draw_map.c \
 			ray_casting/update.c \
 			parsing/parse_utils2.c \
+			ray_casting/look.c \
+			ray_casting/move.c \
+			ray_casting/ray.c \
+			ray_casting/projection.c \
 			
 
 SRCDIR = ./srcs/
