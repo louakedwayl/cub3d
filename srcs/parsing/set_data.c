@@ -6,7 +6,7 @@
 /*   By: wlouaked <wlouaked@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 18:41:27 by wlouaked          #+#    #+#             */
-/*   Updated: 2025/02/04 17:18:03 by wlouaked         ###   ########.fr       */
+/*   Updated: 2025/02/04 17:39:29 by wlouaked         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,12 @@ int	ft_norm_set_map2(t_parsing_data *data, char **line, char **string)
 		*string = gnl_strjoin(*string, *line);
 		if (!*line)
 		{
-			ft_free(&string);
+			ft_free(string);
 			printf ("Error: parse error\n");
 			return (EXIT_FAILURE);
 		}
 		free(*line);
-		line = get_next_line(data->fd);
+		*line = get_next_line(data->fd);
 	}
 	return (EXIT_SUCCESS);
 }

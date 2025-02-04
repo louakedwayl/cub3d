@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: wlouaked <wlouaked@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 16:56:26 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/04 17:09:26 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/04 17:44:10 by wlouaked         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,9 @@ void	fill_newmap(t_data *data, int i, int max, char **newmap)
 
 	newmap[i] = (char *)calloc(max, sizeof(char *));
 	if (!newmap[i])
-	{
 		clear_map(newmap);
+	if (!newmap[i])
 		return ;
-	}
 	newmap[i][0] = '1';
 	newmap[i][max] = '\0';
 	if (i == 0 || i == max - 1)
