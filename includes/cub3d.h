@@ -384,6 +384,13 @@ void			draw_map(t_data *data);
 float			process_raycasting(t_data *data, float cast_angle);
 void			raycast(t_data *data);
 
+// map_init.c
+char			*ft_allocplus(char *buffer, size_t size);
+int				get_longest_line(char **map);
+int				get_map_height(char **map);
+void			fill_newmap(t_data *data, int i, int max, char **newmap);
+t_bool			transform_to_square_and_cover(t_data *data);
+
 // look.c
 void			look_up(t_data *data, int sensi, int diff_y);
 void			look_down(t_data *data, int sensi, int diff_y);
