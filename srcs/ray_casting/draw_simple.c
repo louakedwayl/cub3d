@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:18:41 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/02 17:53:14 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/04 11:19:59 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,19 @@ void	put_pixel_on_image(void *img, int x, int y, int color)
 	data = mlx_get_data_addr(img, &di.b_pixel, &di.size_line, &di.endian);
 	if (x < 0 || x >= WINDOW_WIDTH || y < 0 || y >= WINDOW_HEIGHT)
 		return ;
+
+
 	di.pixel_pos = (y * di.size_line) + (x * (di.b_pixel / 8));
+
+	// printf("check x\n");
+
+	// printf("data : %s, ", data);
+	// printf("di.pixel_pos %i, ", di.pixel_pos);
+	// printf("di.color %i\n", di.color);
+
 	*(unsigned int *)(data + di.pixel_pos) = di.color;
+
+	// printf("check y\n");
 }
 
 // algorithme de Bresenham

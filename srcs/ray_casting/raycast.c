@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:25:36 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/03 05:57:10 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/04 12:03:19 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,13 @@ void forward_ray(t_data *data, t_2dpoint_float *ray, float angle)
 
 	t_2dpoint_float on_map_cpy = make_float_point(on_map.x, on_map.y);
 
+
+
+	// data->debug_color = 0x00ff00; //* green
+	// draw_debug_square(data, on_map, 2);
+
+
+	
 	// printf("init ");
 	// print_point_float(on_map);
 	// printf("copy ");
@@ -120,6 +127,11 @@ void forward_ray(t_data *data, t_2dpoint_float *ray, float angle)
 	point_x_projection = make_float_point(-1000, -1000);
 	point_y_projection = make_float_point(-1000, -1000);
 
+	float	hit_part_side = 0.0f;
+	float	hit_part_vertical = 0.0f;
+
+	float	temp_map_coord;
+
 	if (dx != 0)
 	{
 		// vers droite ou gauche
@@ -133,6 +145,9 @@ void forward_ray(t_data *data, t_2dpoint_float *ray, float angle)
 			//* vers gauche
 			on_map.x -= data->square_size / 2.0f;
 		}
+	
+		temp_map_coord = on_map.y;
+
 		on_map.y = ray->y;
 
 		// data->debug_color = 0x00ff00; //* green
@@ -144,9 +159,15 @@ void forward_ray(t_data *data, t_2dpoint_float *ray, float angle)
 
 		point_x_projection.x = ray->x + (dx * distance);
 		point_x_projection.y = ray->y + (dy * distance);
-	
+
+
+		hit_part_side = (point_x_projection.y - temp_map_coord);
+		// printf("hit_part_side : [%f]\n", data->hit_part);
+
 		// data->debug_color = 0x00ff00; //* green
 		// draw_debug_square(data, point_x_projection, 2);
+
+
 
 	}
 	if (dy != 0)
@@ -162,6 +183,13 @@ void forward_ray(t_data *data, t_2dpoint_float *ray, float angle)
 			//! vers bas
 			on_map_cpy.y += data->square_size / 2.0f;
 		}
+
+		temp_map_coord = on_map.x;
+
+		// hit_part_vertical = (ray->x - on_map_cpy.x);
+		//printf("hit_part : [%f]\n", data->hit_part);
+
+
 		on_map_cpy.x = ray->x;
 
 		distance = fabs((on_map_cpy.y - ray->y) / dy);
@@ -170,6 +198,11 @@ void forward_ray(t_data *data, t_2dpoint_float *ray, float angle)
 
 		point_y_projection.x = ray->x + (dx * distance);
 		point_y_projection.y = ray->y + (dy * distance);
+
+
+		hit_part_vertical = (point_y_projection.x - temp_map_coord);
+		// printf("hit_part_side : [%f]\n", data->hit_part);
+
 	}
 
 
@@ -183,6 +216,9 @@ void forward_ray(t_data *data, t_2dpoint_float *ray, float angle)
 	if (get_distance_float((*ray), point_x_projection)
 		< get_distance_float((*ray), point_y_projection))
 	{
+
+		data->hit_part = hit_part_side;
+
 		ray->x = point_x_projection.x;
 		ray->y = point_x_projection.y;
 
@@ -199,6 +235,9 @@ void forward_ray(t_data *data, t_2dpoint_float *ray, float angle)
 	}
 	else
 	{
+
+		data->hit_part = hit_part_vertical;
+
 		ray->x = point_y_projection.x;
 		ray->y = point_y_projection.y;
 
@@ -213,6 +252,8 @@ void forward_ray(t_data *data, t_2dpoint_float *ray, float angle)
 			data->debug_color = 0xffffff; // white
 		}
 	}
+
+	// printf("hit_part : [%f]\n", data->hit_part);
 
 	// if (init_ray.x - ray->x)
 	// t_2dpoint_float ray_copy;
@@ -473,8 +514,6 @@ float process_raycasting(t_data *data, float cast_angle)
 			if (data->debug_mode)
 				draw_debug_square(data, data->rc.hit_point, 2);
 			//!
-
-
 
 			// get_collision_infos(data);
 			t_2dpoint_float temp;

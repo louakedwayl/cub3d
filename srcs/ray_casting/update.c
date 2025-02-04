@@ -6,11 +6,15 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 17:19:46 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/03 05:57:23 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/04 12:39:27 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
+
+
+// #define DEG_TO_RAD(angle) ((angle) * M_PI / 180.0)
+// distance *= cos(DEG_TO_RAD(data->player_look_angle - start_angle));
 
 void	trace_and_display(t_data *data, float start_angle, float end_angle)
 {
@@ -50,10 +54,20 @@ void	trace_and_display(t_data *data, float start_angle, float end_angle)
 
 		distance = process_raycasting(data, start_angle);
 
-		// printf("distance : %i\n", distance);
+		
+		// printf("%f  ||  %f      -      %f",(float)data->player_look_angle, start_angle, distance);
+
+
+		// distance *= cos(data->player_look_angle - start_angle); //! EVITER MURS ARONDIS
+
+		// distance = fabs(distance);
+
+		// printf("  ||  %f\n",distance);
+
+		// printf("distance : %f\n", distance);
 
 		if (!data->debug_mode)
-			if (distance > 4)
+			if (distance > 4.0f)
 				draw_pixel_column(data, column, distance); //, DRAW
 
 		column++;

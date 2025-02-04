@@ -133,6 +133,8 @@ typedef struct s_img {
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
+	int		width;
+	int		height;
 }	t_img;
 
 typedef struct s_parsing_data
@@ -147,6 +149,8 @@ typedef struct s_parsing_data
 	void		*mlx_win;
 	int			floor[3];
 	int			ceiling[3];
+	int			floor_color;
+	int			ceil_color;
 	t_img		img_north;
 	t_img		img_west;
 	t_img		img_south;
@@ -224,6 +228,7 @@ typedef struct s_data
 	t_img				img_south;
 	t_img				img_east;
 
+	t_parsing_data		*parsing_data;
 }	t_data;
 
 //. CORE - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -242,10 +247,56 @@ void			start_game(t_parsing_data *data);
 
 //. FOLDER - - - - - - - - - parsing - - - - - - - - - - -
 
+//' blue.c
+char			*ft_blue(char *line);
+int				set_blue(char **line);
+
 // check_args.c
 int				check_nbr_arg(int argc);
-int 			check_name_map(char **argv);
+int				check_name_map(char **argv);
 int				open_map(t_parsing_data *data, char *map);
+int				handler_open_map(int argc, char **argv, t_parsing_data *data);
+
+//' green.c
+char			*ft_green(char *line);
+int				set_green(char **line);
+
+// parse_utils.c
+void			ft_free(char **str);
+void			init_data(t_parsing_data *data);
+void			free_data(t_parsing_data *data);
+int				is_digit_string(char *string);
+
+// parse.c
+int				ft_create_image(t_parsing_data *data);
+int				parse(int argc, char **argv, t_parsing_data *data);
+
+//' red.c
+char			*ft_red(char *line);
+int				set_red(char **line);
+
+// set_data.c
+int				set_map(t_parsing_data *data);
+int				set_data(t_parsing_data *data);
+int				set_var(t_parsing_data *data);
+
+// set_ea.c
+int				set_ea(t_parsing_data *data, char **line);
+
+// set_no.c
+int				set_no(t_parsing_data *data, char **line);
+
+// set_so.c
+int				set_so(t_parsing_data *data, char **line);
+
+// set_var_select.c
+int				set_var_select(t_parsing_data *data, char *line);
+int				set_var_select2(t_parsing_data *data, char *line);
+int				set_floor(t_parsing_data *data, char **line);
+int				set_ceiling(t_parsing_data *data, char **line);
+
+// set_we.c
+int				set_we(t_parsing_data *data, char **line);
 
 //. FOLDER - - - - - - - - - ray_casting - - - - - - - - -
 

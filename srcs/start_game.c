@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 16:18:46 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/03 06:03:36 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/04 12:38:31 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,9 +174,9 @@ t_2dpoint	get_player_spawn_point(t_data *data, char **map)
 
 void start_game(t_parsing_data *parsing_data)
 {
-	(void) parsing_data;
-
 	t_data	data;
+
+	data.parsing_data = parsing_data;
 
 	data.FOV = 65;
 
@@ -184,16 +184,16 @@ void start_game(t_parsing_data *parsing_data)
 	// data.map = (char **)malloc(sizeof(char *) * 8);
 	//! Attention faire une fonction qui put des angles pour pa segfault
 
-	int choose = 4; /// choose
+	int choose = 0; /// choose
 
 	if (choose == -1)
 	{
 		data.map = (char **)malloc(sizeof(char *) * 4);
 
-		data.map[0] = "0111";
-		data.map[1] = "1011";
-		data.map[2] = "1N01";
-		data.map[3] = "1111";
+		data.map[0] = "01111";
+		data.map[1] = "10011";
+		data.map[2] = "1N001";
+		data.map[3] = "11111";
 
 		data.map[4] = NULL;
 	}

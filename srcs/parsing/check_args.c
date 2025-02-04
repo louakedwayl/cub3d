@@ -48,3 +48,14 @@ int    open_map(t_parsing_data *data, char *map)
     }
     return (EXIT_SUCCESS);
 }
+
+int handler_open_map(int argc, char **argv, t_parsing_data *data)
+{
+	if (check_nbr_arg(argc))
+		return (EXIT_FAILURE);
+	if (check_name_map(argv))
+		return (EXIT_FAILURE);
+	if (open_map(data, argv[1]))
+		return (EXIT_FAILURE);
+    return (EXIT_SUCCESS);
+}
