@@ -15,7 +15,7 @@
 
 # define AZERTY 0
 # define QWERTY 1
-# define KEYBOARD_TYPE AZERTY
+# define KEYBOARD_TYPE QWERTY
 
 # define WINDOW_WIDTH 700
 # define WINDOW_HEIGHT 700
