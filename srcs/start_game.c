@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 16:18:46 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/04 14:56:16 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/04 15:20:48 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,14 @@ t_2dpoint	get_player_spawn_point(t_data *data, char **map)
 		{
 			if ((map[y][x] != '0') && (map[y][x] != '1') && (map[y][x] != ' '))
 			{
+				if (map[y][x] == 'N')
+					data->player_look_angle = -90;
+				else if (map[y][x] == 'E')
+					data->player_look_angle = 0;
+				else if (map[y][x] == 'S')
+					data->player_look_angle = 90;
+				else
+					data->player_look_angle = 180;
 				return (make_point(x, y));
 			}
 			x++;
@@ -177,7 +185,7 @@ t_2dpoint	get_player_spawn_point(t_data *data, char **map)
 
 void	init_data_vars(t_data *data)
 {
-	data->player_look_angle = 0;
+	// data->player_look_angle = 0;
 	data->player_vertical_look = 0;
 	data->key_hook_active = FALSE;
 	data->mode_mini = FALSE;

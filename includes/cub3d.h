@@ -171,6 +171,14 @@ typedef struct s_column_draw_data
 	int color;
 }	t_column_draw_data;
 
+typedef struct s_square_data
+{
+	t_2dpoint	top_left;
+	t_2dpoint	top_right;
+	t_2dpoint	bot_left;
+	t_2dpoint	bot_right;
+}	t_square_data;
+
 typedef struct s_raycast_data
 {
 	int debug_print_limit;
@@ -189,6 +197,29 @@ typedef struct s_raycast_data
 	int last_orientation;
 	int print_limit_count;
 }	t_raycast_data;
+
+typedef struct s_draw_data
+{
+	float			normalized_hit_part;
+	t_img			texture;
+	int				texture_x;
+	int				line_height;
+	int				y;
+	int				color;
+	int				diff;
+	int				texture_y;
+	int				high;
+}	t_draw_data;
+
+typedef struct s_line_data
+{
+	int	dx;
+	int	dy;
+	int	sx;
+	int	sy;
+	int	err;
+	int	e2;
+}	t_line_data;
 
 typedef struct s_data
 {
@@ -305,7 +336,7 @@ void			print_map(char **map);
 // draw_simple.c
 void			put_pixel_on_image(void *img, int x, int y, int color);
 void			draw_line(t_data *data, t_2dpoint a, t_2dpoint b, int color);
-void			draw_white_square(t_data *data, t_2dpoint top_left, t_2dpoint top_right, t_2dpoint bot_left, t_2dpoint bot_right);
+void			draw_white_square(t_data *data, t_square_data *sd);
 void			draw_square_around_playerpos(t_data *data);
 void			draw_square_around_point(t_data *data, t_2dpoint point);
 

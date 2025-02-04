@@ -6,7 +6,7 @@
 #    By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/29 16:11:50 by ajosse            #+#    #+#              #
-#    Updated: 2025/02/04 07:36:59 by ajosse           ###   ########.fr        #
+#    Updated: 2025/02/04 15:40:07 by ajosse           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,6 +39,7 @@ SRCFILES =	main.c \
 			ray_casting/conversion2.c \
 			ray_casting/draw.c \
 			ray_casting/draw_column.c \
+			ray_casting/draw_map.c \
 			ray_casting/update.c \
 			
 
