@@ -338,7 +338,13 @@ t_2dpoint		make_point(int x_value, int y_value);
 t_2dpoint_float	make_float_point(float x_value, float y_value);
 float			get_distance(t_2dpoint a, t_2dpoint b);
 float			get_distance_float(t_2dpoint_float a, t_2dpoint_float b);
-
 float			float_trunc(float value, float min, float max);
+
+//parse_utils2.c
+int	create_north(t_parsing_data *data);
+int	create_south(t_parsing_data *data);
+int	create_east(t_parsing_data *data);
+int	create_west(t_parsing_data *data);
+
 
 #endif

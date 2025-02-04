@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: wlouaked <wlouaked@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:12:41 by wlouaked          #+#    #+#             */
-/*   Updated: 2025/02/04 13:28:07 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/04 15:49:47 by wlouaked         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ int	main(int argc, char **argv)
 	if (parse(argc, argv,&data))
 	{
 		free_data(&data);
+		mlx_destroy_display(data.mlx);
+		free(data.mlx);
 		return (EXIT_FAILURE);
 	}
 
