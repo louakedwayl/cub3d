@@ -6,11 +6,18 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:18:38 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/04 15:46:02 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/04 16:00:01 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
+
+// function called when hooked top right cross or echap
+int	esc_destroy_all(t_data *data)
+{
+	free_all_and_exit(data, EXIT_SUCCESS, NULL);
+	return (0);
+}
 
 // free map[i] && free map
 void	clear_map(char **map)
