@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:24:05 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/04 13:31:02 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/04 16:02:51 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,7 @@ t_mlx_data	*init_mlx_data(t_data *data)
 	}
 	vars->img = NULL;
 	vars->win = NULL;
-	// vars->mlx = NULL;
-	// vars->mlx = mlx_init();
-
-	vars->mlx = data->parsing_data->mlx; //, MLX FROM PARSING
-
+	vars->mlx = data->parsing_data->mlx;
 	if (!vars->mlx)
 	{
 		free(vars);

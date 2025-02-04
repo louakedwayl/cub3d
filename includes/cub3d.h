@@ -171,6 +171,14 @@ typedef struct s_column_draw_data
 	int color;
 }	t_column_draw_data;
 
+typedef struct s_square_data
+{
+	t_2dpoint	top_left;
+	t_2dpoint	top_right;
+	t_2dpoint	bot_left;
+	t_2dpoint	bot_right;
+}	t_square_data;
+
 typedef struct s_raycast_data
 {
 	int debug_print_limit;
@@ -189,6 +197,45 @@ typedef struct s_raycast_data
 	int last_orientation;
 	int print_limit_count;
 }	t_raycast_data;
+
+typedef struct s_draw_data
+{
+	float			normalized_hit_part;
+	t_img			texture;
+	int				texture_x;
+	int				line_height;
+	int				y;
+	int				color;
+	int				diff;
+	int				texture_y;
+	int				high;
+}	t_draw_data;
+
+typedef struct s_line_data
+{
+	int	dx;
+	int	dy;
+	int	sx;
+	int	sy;
+	int	err;
+	int	e2;
+}	t_line_data;
+
+typedef struct s_ray_data
+{
+	float			hit_part_side;
+	float			hit_part_vertical;
+	float			temp_map_coord;
+	t_2dpoint_float	point_x_projection;
+	t_2dpoint_float	point_y_projection;
+	t_2dpoint_float	on_map_cpy;
+	t_2dpoint		temp;
+	t_2dpoint_float	on_map;
+	float			angle_rad;
+	float			dx;
+	float			dy;
+	float			distance;
+}	t_ray_data;
 
 typedef struct s_data
 {
@@ -301,11 +348,12 @@ int				set_we(t_parsing_data *data, char **line);
 void			print_point(t_2dpoint point);
 void			print_point_float(t_2dpoint_float point);
 void			print_map(char **map);
+void			toggle_debug_mode(t_data *data);
 
 // draw_simple.c
 void			put_pixel_on_image(void *img, int x, int y, int color);
 void			draw_line(t_data *data, t_2dpoint a, t_2dpoint b, int color);
-void			draw_white_square(t_data *data, t_2dpoint top_left, t_2dpoint top_right, t_2dpoint bot_left, t_2dpoint bot_right);
+void			draw_white_square(t_data *data, t_square_data *sd);
 void			draw_square_around_playerpos(t_data *data);
 void			draw_square_around_point(t_data *data, t_2dpoint point);
 
@@ -315,13 +363,16 @@ void			draw_debug_square(t_data *data, t_2dpoint_float point, int size);
 void			draw_pixel_column(t_data *data, int column, float distance);
 
 // free.c
+int				esc_destroy_all(t_data *data);
 void			clear_map(char **map);
 void			free_all_and_exit(t_data *data, int exitcode, char *optional_msg);
 
 // hook.c
-int				esc_destroy_all(t_data *data);
+int				int_trunc(int value, int min, int max);
 int				key_hook(int keycode, t_data *data);
 int				mouse_move_hook(int x, int y, t_data *data);
+t_bool			player_is_in_wall(t_data *data);
+void			look_vertical(t_data *data, int y);
 
 // init.c
 t_mlx_data		*init_mlx_data(t_data *data);
@@ -333,11 +384,41 @@ void			draw_map(t_data *data);
 float			process_raycasting(t_data *data, float cast_angle);
 void			raycast(t_data *data);
 
+// map_init.c
+char			*ft_allocplus(char *buffer, size_t size);
+int				get_longest_line(char **map);
+int				get_map_height(char **map);
+void			fill_newmap(t_data *data, int i, int max, char **newmap);
+t_bool			transform_to_square_and_cover(t_data *data);
+
+// look.c
+void			look_up(t_data *data, int sensi, int diff_y);
+void			look_down(t_data *data, int sensi, int diff_y);
+void			look_right(t_data *data, int sensi, int diff_x);
+void			look_left(t_data *data, int sensi, int diff_x);
+void			look_horizontal(t_data *data, int x);
+
+// move.c
+int				mouse_move_hook(int x, int y, t_data *data);
+void			move_azerty(t_data *data, int keycode);
+void			move_qwerty(t_data *data, int keycode);
+void			init_movement_vars(t_data *data);
+void			move_player(t_data *data, int keycode);
+
 // utils.c
 t_2dpoint		make_point(int x_value, int y_value);
 t_2dpoint_float	make_float_point(float x_value, float y_value);
 float			get_distance(t_2dpoint a, t_2dpoint b);
 float			get_distance_float(t_2dpoint_float a, t_2dpoint_float b);
+
+// ray.c
+void			update_ray(t_data *data, float cast_angle);
+void			init_raycast_vars(t_data *data);
+
+void			init_raydata(t_data *data, float angle, t_ray_data *rd, t_2dpoint_float *ray);
+void			project_ray_horizontal(t_data *data, t_2dpoint_float *ray, t_ray_data *rd);
+void			project_ray_vertical(t_data *data, t_2dpoint_float *ray, t_ray_data *rd);
+int				is_near_corner(float x, float y, float square_size);
 
 float			float_trunc(float value, float min, float max);
 
