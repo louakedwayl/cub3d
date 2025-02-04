@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 16:56:26 by ajosse            #+#    #+#             */
-/*   Updated: 2025/02/04 17:08:48 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/04 17:09:26 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,6 @@ t_bool	transform_to_square_and_cover(t_data *data)
 	while (i < max)
 	{
 		fill_newmap(data, i, max, newmap);
-		print_map(newmap);
 		i++;
 	}
 	data->map_height = max;
