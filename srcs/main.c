@@ -6,7 +6,7 @@
 /*   By: ajosse <ajosse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:12:41 by wlouaked          #+#    #+#             */
-/*   Updated: 2025/02/04 08:45:07 by ajosse           ###   ########.fr       */
+/*   Updated: 2025/02/04 13:28:07 by ajosse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,11 @@ int	main(int argc, char **argv)
 	data.floor_color = make_color(data.floor[0], data.floor[1], data.floor[2]);
 	data.ceil_color = make_color(data.ceiling[0], data.ceiling[1], data.ceiling[2]);
 
-	ft_free(data.mlx);
+	// mlx_destroy_display(data.mlx);
+	// ft_free(data.mlx);
 	// ft_free(data.mlx_win);
 
-	printf("PARSING DONE\n");
+	// printf("PARSING DONE\n");
 
 	start_game(&data);
 
