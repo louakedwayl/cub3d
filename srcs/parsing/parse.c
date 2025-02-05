@@ -6,7 +6,7 @@
 /*   By: wlouaked <wlouaked@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 16:26:04 by wlouaked          #+#    #+#             */
-/*   Updated: 2025/02/04 16:41:51 by wlouaked         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:25:22 by wlouaked         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,12 @@ int	parse(int argc, char **argv, t_parsing_data *data)
 			mlx_destroy_image(data->mlx, data->img_east.img);
 		if (data->img_west.img)
 			mlx_destroy_image(data->mlx, data->img_west.img);
-		close(data->fd);
 		clear_map(data->map);
-		return (EXIT_FAILURE);
+		return (close(data->fd), EXIT_FAILURE);
 	}
-	close(data->fd);
-	return (EXIT_SUCCESS);
+	if (check_map(data))
+		return (EXIT_FAILURE);
+	return (close(data->fd), EXIT_SUCCESS);
 }
+
+

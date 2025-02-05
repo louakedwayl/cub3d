@@ -142,6 +142,10 @@ typedef struct s_parsing_data
 	int			fd;
 	char		**map;
 	char		*north;
+	int			xmax;
+	int			ymax;
+	int			player_x;
+	int			player_y;
 	char		*west;
 	char		*south;
 	char		*east;
@@ -423,10 +427,24 @@ int				is_near_corner(float x, float y, float square_size);
 float			float_trunc(float value, float min, float max);
 
 //parse_utils2.c
-int	create_north(t_parsing_data *data);
-int	create_south(t_parsing_data *data);
-int	create_east(t_parsing_data *data);
-int	create_west(t_parsing_data *data);
+int		create_north(t_parsing_data *data);
+int		create_south(t_parsing_data *data);
+int		create_east(t_parsing_data *data);
+int		create_west(t_parsing_data *data);
+
+//check_map.c
+int		ft_search_player(t_parsing_data *data);
+int		check_map(t_parsing_data *data);
+int		ft_fill(t_parsing_data *data, char **clone, int x, int y);
+
+
+
+//check_map_utils.c
+char	**ft_strrdup(char **s);
+void	printf_map(char **map);
+void	ft_set_xmax(t_parsing_data *data);
+void	ft_set_ymax(t_parsing_data *data);
+
 
 
 #endif

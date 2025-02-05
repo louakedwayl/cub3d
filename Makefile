@@ -6,7 +6,7 @@
 #    By: wlouaked <wlouaked@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/29 16:11:50 by ajosse            #+#    #+#              #
-#    Updated: 2025/02/04 17:33:20 by wlouaked         ###   ########.fr        #
+#    Updated: 2025/02/05 17:23:03 by wlouaked         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,8 @@ SRCFILES =	main.c \
 			parsing/set_so.c \
 			parsing/set_var_select.c \
 			parsing/set_we.c \
+			parsing/check_map.c \
+			parsing/check_map_utils.c \
 			ray_casting/debug.c \
 			ray_casting/draw_simple.c \
 			ray_casting/free.c \

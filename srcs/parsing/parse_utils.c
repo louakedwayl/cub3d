@@ -6,7 +6,7 @@
 /*   By: wlouaked <wlouaked@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 16:07:55 by wlouaked          #+#    #+#             */
-/*   Updated: 2025/02/04 16:08:36 by wlouaked         ###   ########.fr       */
+/*   Updated: 2025/02/05 15:13:29 by wlouaked         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,10 @@ void	init_data(t_parsing_data *data)
 	data->ceiling[0] = -1;
 	data->ceiling[1] = -1;
 	data->ceiling[2] = -1;
+	data->xmax = 0;
+	data->ymax = 0;
+	data->player_x = -1;
+	data->player_y = -1;
 }
 
 void	free_data(t_parsing_data *data)
